@@ -25,4 +25,4 @@ export const api = (value: {
 }
 
 
-export interface Cachable {}
+export abstract class Cachable {}

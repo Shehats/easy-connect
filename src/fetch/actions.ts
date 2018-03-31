@@ -4,7 +4,9 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import { create, access } from '../util/util';
 import { construct, constructArray, createApiData, updateApiData, deleteApiData } from '../util/options';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class Actions {
   public static getData<T> (Type: (new () => T), url?: string): Observable<T[]> {
     let _data = create(Type);

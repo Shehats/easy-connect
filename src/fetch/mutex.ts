@@ -3,7 +3,9 @@ import { Cachable } from '../util/util';
 import { Actions } from './actions';
 import { Store, IStore } from './store';
 import * as _ from 'lodash';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class Mutex {
   store: IStore;
   constructor (store?: IStore) {
@@ -24,17 +26,4 @@ export class Mutex {
     ? this.store.getDataByKey(Type, id)
     : this.store.putDataByKey(Type, Actions.getDataById(Type, id), id);
   }
-
-  public create<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any> {
-    return Actions.postData(Type, data, url);
-  }
-
-  public update<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any> {
-    return Actions.updateData(Type, data, url);
-  }
-
-  public delete<T> (Type: (new () => T), url?: string, data?: T | T[]): Observable<any> {
-    return Actions.deleteData(Type, url, data);
-  }
-
 }

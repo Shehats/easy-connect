@@ -2,6 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/do'
 import { getName, create } from '../util/util';
+import { Injectable } from '@angular/core';
 
 export interface IStore {
   check<T> (key: (new () => T) | string): boolean;
@@ -14,6 +15,7 @@ export interface IStore {
 
 export interface ISession {}
 
+@Injectable()
 export class Store implements IStore{
   contents: ISession;
   constructor () {

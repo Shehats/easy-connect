@@ -4,6 +4,7 @@ import { Cache } from './fetch/cache';
 import { Mutex } from './fetch/mutex';
 import { Store } from './fetch/store';
 import { HttpFactory } from './auth/auth-interceptor';
+import { Easy } from './easy';
 
 export { 
   access, 
@@ -27,11 +28,16 @@ export { Token } from './auth/auth-util';
 
 export { HttpFactory } from './auth/auth-interceptor';
 
+export { Easy } from './easy';
+
+export { AsyncObject, AsyncList } from './async-object';
+
 @NgModule({
   providers: [
   Actions,
   Cache,
   Mutex,
+  Easy,
   Store,
   HttpFactory
   ]

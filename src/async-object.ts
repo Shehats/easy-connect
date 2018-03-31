@@ -12,16 +12,17 @@ export abstract class AsyncObject<T> {
     .map(_ => this.easy.getByKey(this.Type, this.getKey())));
   }
 
-  public getData() {
+  public syncData() {
     return this.state.next();
   }
+
   public abstract getKey(): any;
 }
 
 export class AsyncList<T> {
   easy: Easy;
   Type: (new () => T);
-  state: Subject<T|T[]>
+  state: Subject<T|T[]>;
 
   constructor (key: string) {
     this.easy = new Easy();
@@ -32,5 +33,21 @@ export class AsyncList<T> {
             .map(_2 => this.easy.getByKey(this.Type, y[key])))
         }))
        ))
+  }
+
+  public syncData() {
+    return this.state.next();
+  }
+
+  public addData(data: T|T[]): Observable<any> {
+    return this.easy.create(this.Type, data);
+  }
+
+  public updateData(data: T|T[]): Observable<any> {
+    return this.easy.update(this.Type, data);
+  }
+
+  public deleteData(): Observable<any> {
+    return this.easy.delete(this.Type);
   }
 } 

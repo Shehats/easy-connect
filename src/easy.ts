@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Rx';
 import * as _ from 'lodash';
 import { Actions } from './fetch/actions';
 
-
 @Injectable()
 export class Easy {
   mutex: Mutex;

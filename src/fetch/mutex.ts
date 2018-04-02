@@ -1,14 +1,17 @@
 import { Observable } from 'rxjs/Rx';
 import { Cachable } from '../util/util';
 import { Actions } from './actions';
-import { Store, IStore } from './store';
+import { Store } from './store';
+import { IStore, IMutex, ITypes } from '../core';
 import * as _ from 'lodash';
-import { Injectable } from '@angular/core';
+import { injectable, inject } from "inversify";
 
-@Injectable()
-export class Mutex {
+@injectable()
+export class Mutex implements IMutex {
   store: IStore;
-  constructor (store?: IStore) {
+  constructor (
+    @inject(ITypes.IStore) store?: IStore
+    ) {
     this.store = (store) ? store: new Store();
   }
   public getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]> {

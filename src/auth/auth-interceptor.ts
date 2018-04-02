@@ -3,9 +3,7 @@ import { Observable } from 'rxjs/Rx';
 import { Cache } from '../fetch/cache';
 import { Token } from './auth-util';
 import { create, isSecure } from '../util/util';
-import { Injectable } from '@angular/core';
 
-@Injectable()
 export class HttpFactory {
   public static getHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
     let http = axios.create();

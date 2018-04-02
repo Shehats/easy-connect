@@ -1,10 +1,8 @@
 import { Observable } from 'rxjs/Rx';
 import * as _storage from 'localforage';
 import { getName, create, Cachable } from '../util/util';
-import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 
-@Injectable()
 export class Cache {
   public static getItem<T extends Cachable>(key: (new () => T) | string): Observable<T[]|T>{
     return Observable.fromPromise(_storage.getItem((typeof key === "string")? key : getName(create(key))));

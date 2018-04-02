@@ -1,6 +1,6 @@
 {
   "name": "easy-connect",
-  "version": "0.1.0",
+  "version": "0.1.21",
   "description": "A package that implements http fetching from rest api, scheduled cache and socket connections.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -41,6 +41,7 @@
     "@types/reflect-metadata": "^0.1.0",
     "axios": "^0.18.0",
     "babel-loader": "^7.1.4",
+    "inversify": "^4.11.1",
     "localforage": "^1.6.0",
     "lodash": "^4.17.5",
     "nock": "^9.2.3",

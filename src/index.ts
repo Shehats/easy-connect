@@ -5,6 +5,7 @@ import { Mutex } from './fetch/mutex';
 import { Store } from './fetch/store';
 import { HttpFactory } from './auth/auth-interceptor';
 import { Easy } from './easy';
+import { EasyAccess } from './angular/easy';
 
 export { 
   access, 
@@ -30,16 +31,36 @@ export { HttpFactory } from './auth/auth-interceptor';
 
 export { Easy } from './easy';
 
-export { AsyncObject, AsyncList } from './async-object';
+export { EasyTokenAuth, EasyAuth } from './auth/auth';
+
+import { EasyTokenAuth, EasyAuth } from './auth/auth';
+
+
+import container  from './inversify.config';
+
+
+export { 
+  IAuth, 
+  IMutex, 
+  IConfig, 
+  ISession, 
+  IStore, 
+  IEasy} from './core';
+
+
+// export { AsyncObject, AsyncList } from './async-object';
 
 @NgModule({
-  providers: [
+  exports: [
   Actions,
+  EasyTokenAuth,
+  EasyAuth,
   Cache,
   Mutex,
   Easy,
   Store,
-  HttpFactory
+  HttpFactory,
+  EasyAccess
   ]
 })
 export class EasyAccessModule {}

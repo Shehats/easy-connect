@@ -2,20 +2,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/do'
 import { getName, create } from '../util/util';
-import { Injectable } from '@angular/core';
+import { IStore, ISession, ITypes } from '../core';
 
-export interface IStore {
-  check<T> (key: (new () => T) | string): boolean;
-  checkByKey<T> (key: (new () => T) | string, id: any): boolean;
-  getData<T>(key: (new () => T) | string): Observable<T|T[]>;
-  getDataByKey<T> (key: (new () => T) | string, id: any): Observable<T>;
-  putData<T> (key: (new () => T) | string, data: Observable<T|T[]>): Observable<T|T[]>;
-  putDataByKey<T> (key: (new () => T) | string, data: Observable<T>, id: any): Observable<T>;
-}
-
-export interface ISession {}
-
-@Injectable()
 export class Store implements IStore{
   contents: ISession;
   constructor () {

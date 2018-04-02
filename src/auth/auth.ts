@@ -1,81 +1,72 @@
 import { Token } from './auth-util';
 import { Cache } from '../fetch/cache';
 import { Observable } from 'rxjs/Rx';
+import { IAuth, IConfig, ITypes } from '../core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { injectable, inject } from "inversify";
 
-export class EasyTokenAuth {
+@injectable()
+export class EasyTokenAuth implements IAuth {
   token: Token;
-  loginUrl: string;
-  logoutUrl: string;
-  registerUrl: string;
+  config: IConfig;
 
-  constructor (config: {
-    loginUrl?: string,
-    logoutUrl?: string,
-    registerUrl?: string,
-    prefix?: string, 
-    key?:string
-  }) {
+  constructor (
+    @inject(ITypes.IConfig) config: IConfig
+    ) {
     this.token = new Token(config.prefix, config.key);
-    this.loginUrl = config.loginUrl;
-    this.logoutUrl = config.logoutUrl;
-    this.registerUrl = config.registerUrl;
+    this.config = config;
   }
 
   public login(loginParams: Object): Observable<any> {
-    return Observable.fromPromise(axios.post(this.loginUrl, loginParams))
+    return Observable.fromPromise(axios.post(this.config.loginUrl, loginParams))
     .map((x: AxiosResponse<any>) => (this.token.token =(this.token.key)? x.data[this.token.key]: x.headers['Authorization']))
     .flatMap((token: Token) => Cache.setItem(Token, token))
   }
 
   public logout(): Observable<any> {
     return Cache.removeItem(Token)
-    .flatMap(_ => axios.delete(this.logoutUrl));
+    .flatMap(_ => axios.delete(this.config.logoutUrl));
   }
 
   public register(registerParams: Object): Observable<any> {
-    return Observable.fromPromise(axios.post(this.registerUrl, registerParams))
+    return Observable.fromPromise(axios.post(this.config.registerUrl, registerParams))
     .flatMap((x: AxiosResponse<any>) => (x.headers['Authorization'] || x.data[this.token.key]) 
       ? Cache.setItem(Token, (this.token.token = (x.headers['Authorization'])
         ? x.headers['Authorization']
         : x.data[this.token.key]))
       : Observable.fromPromise(x.data))
   }
+
+  public validate(): Observable<any> {
+    return Observable.fromPromise(axios.get(this.config.validateUrl));
+  }
+
 }
 
-export class EasyAuth {
-  loginUrl: string;
-  logoutUrl: string;
-  registerUrl: string;
-  validateUrl: string;
+export class EasyAuth implements IAuth{
+  config: IConfig;
 
-  constructor (config: {
-    loginUrl: string,
-    logoutUrl: string,
-    registerUrl: string,
-    validateUrl: string
-  }) {
-    this.loginUrl = config.loginUrl;
-    this.logoutUrl = config.logoutUrl;
-    this.registerUrl = config.registerUrl;
-    this.validateUrl = config.validateUrl;
+  constructor (
+    @inject(ITypes.IConfig) config: IConfig
+    ) {
+    this.config = config;
   }
 
   public login (loginParams: Object): Observable<any> {
     return Observable.fromPromise(
-      axios.post(this.logoutUrl, loginParams)
+      axios.post(this.config.logoutUrl, loginParams)
       .then((x: AxiosResponse<any>) => x.data));
   }
 
   public logout (): Observable<any> {
-    return Observable.fromPromise(axios.delete(this.logoutUrl));
+    return Observable.fromPromise(axios.delete(this.config.logoutUrl));
   }
 
   public validate(): Observable<any> {
-    return Observable.fromPromise(axios.get(this.validateUrl));
+    return Observable.fromPromise(axios.get(this.config.validateUrl));
   }
 
   public register(registerParams: Object): Observable<any> {
-    return Observable.fromPromise(axios.post(this.registerUrl, registerParams));
+    return Observable.fromPromise(axios.post(this.config.registerUrl, registerParams));
   }
 }

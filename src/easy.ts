@@ -20,7 +20,7 @@ export class Easy implements IEasy {
     force?: boolean): Observable<T|T[]> {
     return this.mutex.getAll(Type, force)
     .do(x => {
-      if (create(Type) instanceof Cachable)
+      if (create(Type) instanceof Cachable) 
         Cache.setItem(Type, x); 
     })
   }

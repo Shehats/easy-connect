@@ -9,10 +9,8 @@ import { injectable, inject } from "inversify";
 @injectable()
 export class Mutex implements IMutex {
   store: IStore;
-  constructor (
-    @inject(ITypes.IStore) store?: IStore
-    ) {
-    this.store = (store) ? store: new Store();
+  constructor () {
+    this.store = new Store();
   }
   public getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]> {
     return (force)

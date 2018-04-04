@@ -1,5 +1,5 @@
 import { Container } from "inversify";
-
+import { EasyAccess } from './angular/easy';
 import { 
   IAuth, 
   IMutex, 
@@ -7,6 +7,7 @@ import {
   ISession, 
   IStore, 
   IEasy,
+  IAccess,
   ITypes} from './core';
   
 import { EasyTokenAuth, EasyAuth } from './auth/auth';
@@ -14,11 +15,16 @@ import { Mutex } from './fetch/mutex';
 import { Store } from './fetch/store';
 import { Easy } from './easy';
 
-let container = new Container();
-container.bind<IAuth>(ITypes.IAuth).to(EasyTokenAuth);
-container.bind<IAuth>(ITypes.IAuth).to(EasyAuth);
-container.bind<IMutex>(ITypes.IMutex).to(Mutex);
-container.bind<IStore>(ITypes.IStore).to(Store);
-container.bind<IEasy>(ITypes.IEasy).to(Easy);
+const container = new Container();
+container.bind<IAuth>(ITypes.IAuth).toConstructor(EasyTokenAuth);
+// container.bind<IAuth>(ITypes.IAuth).toConstructor(EasyAuth);
+container.bind<IStore>(ITypes.IStore).toConstructor(Store);
+container.bind<IMutex>(ITypes.IMutex).toConstructor(Mutex);
+container.bind<IEasy>(ITypes.IEasy).toConstructor(Easy);
+container.bind<IAccess>(ITypes.IAccess).toConstructor(EasyAccess);
 
-export default container;
+let store = container.get<IStore>(ITypes.IStore);
+let mutex = container.get<IMutex>(ITypes.IMutex);
+console.log(store)
+console.log(mutex)
+export { container };

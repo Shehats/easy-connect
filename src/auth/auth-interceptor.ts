@@ -24,7 +24,7 @@ export class HttpFactory {
       return config;
     })
     http.interceptors.response.use((response: AxiosResponse<any>) => {
-      if(x.key && response.data[x.key])
+      if(x && x.key && response.data[x.key])
         x.token = response.data[x.key]
       return response;
     })

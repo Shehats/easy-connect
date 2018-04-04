@@ -4,15 +4,16 @@ import { Observable } from 'rxjs/Rx';
 import * as _ from 'lodash';
 import { Actions } from '../fetch/actions';
 import { injectable, inject } from "inversify";
-import { ITypes, IEasy } from '../core'
+import { ITypes, IEasy, IAccess } from '../core'
+import { Easy } from '../easy';
 import { Injectable } from '@angular/core';
 
 @Injectable()
 @injectable()
-export class EasyAccess {
+export class EasyAccess implements IAccess {
   easy: IEasy;
-  constructor(@inject(ITypes.IEasy) easy: IEasy) {
-    this.easy = easy;
+  constructor(@inject(ITypes.IEasy) easy?: IEasy) {
+    this.easy = (easy)?easy: new Easy();
   }
 
   public getAll<T> (Type: (new () => T),

@@ -40,11 +40,32 @@ export interface IEasy {
   delete<T> (Type: (new () => T), url?: string, data?: T | T[]): Observable<any>
 }
 
+export interface IAccess {
+  getAll<T> (Type: (new () => T),
+    url?: string, 
+    force?: boolean): Observable<T|T[]>;
+
+  getByKey<T> (Type: (new () => T), 
+    id: any,
+    force?: boolean,
+    url?: string): Observable<T|T[]>;
+
+  create<T> (Type: (new () => T), 
+    data: T | T[], url?: string): Observable<any>;
+
+  update<T> (Type: (new () => T), 
+    data: T| T[], url?: string): Observable<any>;
+
+  delete<T> (Type: (new () => T), 
+    url?: string, data?: T | T[]): Observable<any>;
+}
+
 export const ITypes = {
   IStore: Symbol('IStore'),
   ISession: Symbol('ISession'),
   IAuth: Symbol('IAuth'),
   IMutex: Symbol('IMutex'),
   IConfig: Symbol('IConfig'),
-  IEasy: Symbol('IEasy')
+  IEasy: Symbol('IEasy'),
+  IAccess: Symbol('IAccess')
 }

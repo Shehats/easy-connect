@@ -6,8 +6,14 @@ import { IStore, ISession, ITypes } from '../core';
 
 export class Store implements IStore{
   contents: ISession;
-  constructor () {
+  private static _instance: Store;
+
+  private constructor () {
     this.contents= new class implements ISession {}()
+  }
+
+  public static get Instance() {
+    return this._instance || (this._instance = new this());
   }
 
   public getData<T> (key: (new () => T) | string): Observable<T|T[]> {

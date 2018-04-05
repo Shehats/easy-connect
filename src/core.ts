@@ -33,7 +33,7 @@ export interface IConfig {
 }
 
 export interface IEasy {
-  getAll<T> (Type: (new () => T), url?: string, force?: boolean): Observable<T|T[]>;
+  getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]>;
   getByKey<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T|T[]>;
   create<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any>;
   update<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any>;

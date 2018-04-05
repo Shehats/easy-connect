@@ -15,14 +15,9 @@ import { Store } from './fetch/store';
 import { Easy } from './easy';
 
 const container = new Container();
-container.bind<IAuth>(ITypes.IAuth).toConstructor(EasyTokenAuth);
+container.bind<IAuth>(ITypes.IAuth).to(EasyTokenAuth);
 // container.bind<IAuth>(ITypes.IAuth).toConstructor(EasyAuth);
-container.bind<IStore>(ITypes.IStore).toConstructor(Store);
-container.bind<IMutex>(ITypes.IMutex).toConstructor(Mutex);
-container.bind<IEasy>(ITypes.IEasy).toConstructor(Easy);
+container.bind<IMutex>(ITypes.IMutex).to(Mutex);
+container.bind<IEasy>(ITypes.IEasy).to(Easy);
 
-let store = container.get<IStore>(ITypes.IStore);
-let mutex = container.get<IMutex>(ITypes.IMutex);
-console.log(store)
-console.log(mutex)
 export { container };

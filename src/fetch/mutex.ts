@@ -10,7 +10,7 @@ import { injectable, inject } from "inversify";
 export class Mutex implements IMutex {
   store: IStore;
   constructor () {
-    this.store = new Store();
+    this.store = Store.Instance;
   }
   public getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]> {
     return (force)
@@ -26,5 +26,13 @@ export class Mutex implements IMutex {
     : (this.store.checkByKey(Type, id))
     ? this.store.getDataByKey(Type, id)
     : this.store.putDataByKey(Type, Actions.getDataById(Type, id), id);
+  }
+
+  public getByFilter<T> (Type: (new () => T), key: any, force?: boolean, url?: string): Observable<T> {
+    return (force)
+    ? this.store.putDataByKey(Type, Actions.getDataByFilter(Type, key), key)
+    : (this.store.checkByKey(Type, key))
+    ? this.store.getDataByKey(Type, key)
+    : this.store.putDataByKey(Type, Actions.getDataByFilter(Type, key), key);
   }
 }

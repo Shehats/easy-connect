@@ -17,8 +17,10 @@ export const api = (value: {
 
 export const key = (value: {
   filterKey: string,
-  appendBaseUrl: boolean,
+  appendBaseUrl?: boolean,
   filterUrl?: string
+  useUpate?: boolean,
+  useDelete?: boolean
 }) => function (target: Function) {
   Reflect.defineMetadata('key', value, target);
 }

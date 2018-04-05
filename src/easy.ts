@@ -16,9 +16,10 @@ export class Easy implements IEasy {
   }
 
   public getAll<T> (Type: (new () => T),
+    force?: boolean,
     url?: string, 
-    force?: boolean): Observable<T|T[]> {
-    return this.mutex.getAll(Type, force)
+    ): Observable<T|T[]> {
+    return this.mutex.getAll(Type, force, url)
     .do(x => {
       if (create(Type) instanceof Cachable) 
         Cache.setItem(Type, x); 
@@ -29,10 +30,21 @@ export class Easy implements IEasy {
     id: any,
     force?: boolean,
     url?: string): Observable<T|T[]> {
-    return this.mutex.getByKey(Type, id, force)
+    return this.mutex.getByKey(Type, id, force, url)
     .do(x => {
       if (create(Type) instanceof Cachable)
         Cache.setItemByKey(Type, x, id);
+    })
+  }
+
+  public getByFilter<T> (Type: (new () => T), 
+    key: any, 
+    force?: boolean, 
+    url?: string): Observable<T> {
+    return this.mutex.getByFilter(Type, key, force, url)
+    .do(x => {
+      if (create(Type) instanceof Cachable)
+        Cache.setItemByKey(Type, x, key);
     })
   }
 
@@ -44,7 +56,15 @@ export class Easy implements IEasy {
     return Actions.updateData(Type, data, url);
   }
 
+  public updateById<T> (Type: (new () => T), data: T| T[], id?: any, url?: string): Observable<any> {
+    return Actions.updateDataById(Type, data, id, url);
+  }
+
   public delete<T> (Type: (new () => T), url?: string, data?: T | T[]): Observable<any> {
     return Actions.deleteData(Type, url, data);
-  } 
+  }
+
+  public deleteDataById<T> (Type: (new () => T), url?: string, id?: any): Observable<any> {
+    return Actions.deleteDataById(Type, id, url);
+  }
 }

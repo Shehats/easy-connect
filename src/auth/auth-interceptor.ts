@@ -7,8 +7,8 @@ import { create, isSecure } from '../util/util';
 export class HttpFactory {
   public static getHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
     let http = axios.create();
-    return Cache.getItem(Token)
-    .map((x: Token) => { 
+    return isSecure(create(type))
+    ? Cache.getItem(Token).map((x: Token) => { 
       http.interceptors.request.use(config => {
       if (isSecure(create(type)) && x.token) {
         config.headers['post']['Authorization'] = x.prefix + ' ' + x.token;
@@ -29,6 +29,15 @@ export class HttpFactory {
       return response;
     })
     return http;
+  })
+  : Observable.of(http).map(x => {
+    http.interceptors.request.use(config => {
+      config.headers['post']['Content-Type'] = 'application/json';
+      config.headers['put']['Content-Type'] = 'application/json';
+      config.headers['patch']['Content-Type'] = 'application/json';
+      return config;
+    })
+    return x;
   })
   }
 }

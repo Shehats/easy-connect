@@ -7,7 +7,7 @@ export class Token extends Cachable{
 
   constructor(prefix?: string, key?:string, token?: string) {
   	super();
-  	this.prefix = (prefix) ? prefix: '';
+  	this.prefix = (prefix) ? prefix: 'Bearer';
   	this.key= (key) ? key: '';
   	this.token = (token) ? token: '';
   }

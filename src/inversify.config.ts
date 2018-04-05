@@ -1,5 +1,4 @@
 import { Container } from "inversify";
-import { EasyAccess } from './angular/easy';
 import { 
   IAuth, 
   IMutex, 
@@ -21,7 +20,6 @@ container.bind<IAuth>(ITypes.IAuth).toConstructor(EasyTokenAuth);
 container.bind<IStore>(ITypes.IStore).toConstructor(Store);
 container.bind<IMutex>(ITypes.IMutex).toConstructor(Mutex);
 container.bind<IEasy>(ITypes.IEasy).toConstructor(Easy);
-container.bind<IAccess>(ITypes.IAccess).toConstructor(EasyAccess);
 
 let store = container.get<IStore>(ITypes.IStore);
 let mutex = container.get<IMutex>(ITypes.IMutex);

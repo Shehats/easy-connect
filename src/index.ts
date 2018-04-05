@@ -5,7 +5,6 @@ import { Mutex } from './fetch/mutex';
 import { Store } from './fetch/store';
 import { HttpFactory } from './auth/auth-interceptor';
 import { Easy } from './easy';
-import { EasyAccess } from './angular/easy';
 import { EasyTokenAuth, EasyAuth } from './auth/auth';
 
 export { 

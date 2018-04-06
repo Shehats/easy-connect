@@ -27,7 +27,8 @@ export const key = (value: {
 
 export const query = (value: {
   queryKey: string,
-  queryUrl?: string
+  queryUrl?: string,
+  appendBase?: boolean
 }) => function (target: Function) {
   Reflect.defineMetadata('query', value, target);
 }

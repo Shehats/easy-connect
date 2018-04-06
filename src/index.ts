@@ -5,7 +5,9 @@ export {
   isSecure,
   getName,
   create,
-  Cachable
+  Cachable,
+  accessKey,
+  accessQuery
 } from './util/util';
 
 export { Actions } from './fetch/actions';
@@ -24,10 +26,6 @@ export { Easy } from './core/easy';
 
 export { EasyTokenAuth, EasyAuth } from './auth/auth';
 
-export { container } from './core/inversify.config';
-
-export { AuthService } from './angular/auth.service';
-
 export { 
   IAuth, 
   IMutex, 
@@ -35,5 +33,4 @@ export {
   ISession, 
   IStore, 
   IEasy,
-  IAccess,
   AuthType } from './core/core';

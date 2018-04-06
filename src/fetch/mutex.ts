@@ -2,16 +2,21 @@ import { Observable } from 'rxjs/Rx';
 import { Cachable } from '../util/util';
 import { Actions } from './actions';
 import { Store } from './store';
-import { IStore, IMutex, ITypes } from '../core/core';
+import { IStore, IMutex } from '../core/core';
 import * as _ from 'lodash';
-import { injectable, inject } from "inversify";
 
-@injectable()
 export class Mutex implements IMutex {
   store: IStore;
-  constructor () {
+  private static _instance: Mutex;
+
+  private constructor () {
     this.store = Store.Instance;
   }
+
+  public static get Instance() {
+    return this._instance || (this._instance = new this());
+  }
+
   public getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]> {
     return (force)
     ? this.store.putData(Type, Actions.getData(Type))

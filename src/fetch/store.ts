@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/do'
 import { getName, create } from '../util/util';
-import { IStore, ISession, ITypes } from '../core/core';
+import { IStore, ISession } from '../core/core';
 
 export class Store implements IStore{
   contents: ISession;
@@ -17,7 +17,6 @@ export class Store implements IStore{
   }
 
   public getData<T> (key: (new () => T)): Observable<T|T[]> {
-    console.log('getting data from store')
     return Observable.from(this.contents[getName(create(key))]);
   }
 
@@ -42,7 +41,7 @@ export class Store implements IStore{
   }
 
   public checkByKey<T> (key: (new () => T), id: any): boolean {
-    return this.contents[(typeof key === "string")? key:getName(create(key))][id]
+    return this.contents[getName(create(key))][id]
     ? true : false; 
   }
 }

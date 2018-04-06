@@ -1,18 +1,14 @@
 import { Token } from './auth-util';
 import { Cache } from '../fetch/cache';
 import { Observable } from 'rxjs/Rx';
-import { IAuth, IConfig, ITypes } from '../core/core'
+import { IAuth, IConfig } from '../core/core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { injectable, inject } from "inversify";
 
-@injectable()
 export class EasyTokenAuth implements IAuth {
   token: Token;
   config: IConfig;
 
-  constructor (
-    @inject(ITypes.IConfig) config: IConfig
-    ) {
+  constructor (config: IConfig) {
     this.token = new Token(config.prefix, config.key);
     this.config = config;
   }
@@ -46,9 +42,7 @@ export class EasyTokenAuth implements IAuth {
 export class EasyAuth implements IAuth{
   config: IConfig;
 
-  constructor (
-    @inject(ITypes.IConfig) config: IConfig
-    ) {
+  constructor (config: IConfig) {
     this.config = config;
   }
 

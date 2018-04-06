@@ -3,3 +3,4 @@ dist
 *.lock
 *-lock.json
 AngularExample
+angular

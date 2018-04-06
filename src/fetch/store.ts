@@ -2,41 +2,46 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/do'
 import { getName, create } from '../util/util';
-import { IStore, ISession, ITypes } from '../core';
+import { IStore, ISession } from '../core/core';
 
 export class Store implements IStore{
   contents: ISession;
-  constructor () {
+  private static _instance: Store;
+
+  private constructor () {
     this.contents= new class implements ISession {}()
   }
 
-  public getData<T> (key: (new () => T) | string): Observable<T|T[]> {
-    return Observable.from(this.contents[(typeof key === "string")? key:getName(create(key))]);
+  public static get Instance() {
+    return this._instance || (this._instance = new this());
   }
 
-  public getDataByKey<T> (key: (new () => T) | string, id: any): Observable<T> {
-    return Observable.from(this.contents[(typeof key === "string")? key:getName(create(key))][id]);
+  public getData<T> (key: (new () => T)): Observable<T|T[]> {
+    return Observable.from(this.contents[getName(create(key))]);
   }
 
-  public putData<T> (key: (new () => T) | string, data: Observable<T|T[]>): Observable<T|T[]> {
+  public getDataByKey<T> (key: (new () => T), id: any): Observable<T> {
+    return Observable.from(this.contents[getName(create(key))][id]);
+  }
+
+  public putData<T> (key: (new () => T), data: Observable<T|T[]>): Observable<T|T[]> {
     return data.do(x => {
-      this.contents[(typeof key === "string")? key:getName(create(key))] = x;
+      this.contents[getName(create(key))] = x;
     });
   }
 
-  public putDataByKey<T> (key: (new () => T) | string, data: Observable<T>, id: any): Observable<T> {
+  public putDataByKey<T> (key: (new () => T), data: Observable<T>, id: any): Observable<T> {
     return data.do(x => {
-      this.contents[(typeof key === "string")? key:getName(create(key))][id] = x;
+      this.contents[getName(create(key))][id] = x;
     });
   }
 
-  public check<T> (key: (new () => T) | string): boolean {
-    return this.contents[(typeof key === "string")? key:getName(create(key))]
-    ? true : false;
+  public check<T> (key: (new () => T)): boolean {
+    return this.contents[getName(create(key))] ? true : false;
   }
 
-  public checkByKey<T> (key: (new () => T) | string, id: any): boolean {
-    return this.contents[(typeof key === "string")? key:getName(create(key))][id]
+  public checkByKey<T> (key: (new () => T), id: any): boolean {
+    return this.contents[getName(create(key))][id]
     ? true : false; 
   }
 }

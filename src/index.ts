@@ -1,13 +1,3 @@
-import { NgModule } from '@angular/core';
-import { Actions } from './fetch/actions';
-import { Cache } from './fetch/cache';
-import { Mutex } from './fetch/mutex';
-import { Store } from './fetch/store';
-import { HttpFactory } from './auth/auth-interceptor';
-import { Easy } from './easy';
-import { EasyAccess } from './angular/easy';
-import { EasyTokenAuth, EasyAuth } from './auth/auth';
-
 export { 
   access, 
   api,
@@ -15,7 +5,9 @@ export {
   isSecure,
   getName,
   create,
-  Cachable
+  Cachable,
+  accessKey,
+  accessQuery
 } from './util/util';
 
 export { Actions } from './fetch/actions';
@@ -30,11 +22,9 @@ export { Token } from './auth/auth-util';
 
 export { HttpFactory } from './auth/auth-interceptor';
 
-export { Easy } from './easy';
+export { Easy } from './core/easy';
 
 export { EasyTokenAuth, EasyAuth } from './auth/auth';
-
-export { container } from './inversify.config';
 
 export { 
   IAuth, 
@@ -43,14 +33,4 @@ export {
   ISession, 
   IStore, 
   IEasy,
-  IAccess} from './core';
-
-
-// // export { AsyncObject, AsyncList } from './async-object';
-
-// @NgModule({
-//   providers: [
-//   EasyAccess
-//   ]
-// })
-// export class EasyAccessModule {}
+  AuthType } from './core/core';

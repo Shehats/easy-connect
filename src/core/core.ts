@@ -11,6 +11,15 @@ export interface IStore {
 
 export interface ISession {}
 
+export enum AuthType {
+  TOKEN_AUTH,
+  SESSION_AUTH
+}
+
+export interface IExtra {
+  query<T>(Type: (new () => T), url?: string): Observable<T|T[]>;
+}
+
 export interface IAuth {
   login(loginParams: Object): Observable<any>;
   logout(): Observable<any>;
@@ -21,6 +30,7 @@ export interface IAuth {
 export interface IMutex {
   getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]>;
   getByKey<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T>;
+  getByFilter<T> (Type: (new () => T), key: any, force?: boolean, url?: string): Observable<T>;
 }
 
 export interface IConfig {
@@ -33,39 +43,10 @@ export interface IConfig {
 }
 
 export interface IEasy {
-  getAll<T> (Type: (new () => T), url?: string, force?: boolean): Observable<T|T[]>;
+  getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]>;
   getByKey<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T|T[]>;
   create<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any>;
   update<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any>;
-  delete<T> (Type: (new () => T), url?: string, data?: T | T[]): Observable<any>
-}
-
-export interface IAccess {
-  getAll<T> (Type: (new () => T),
-    url?: string, 
-    force?: boolean): Observable<T|T[]>;
-
-  getByKey<T> (Type: (new () => T), 
-    id: any,
-    force?: boolean,
-    url?: string): Observable<T|T[]>;
-
-  create<T> (Type: (new () => T), 
-    data: T | T[], url?: string): Observable<any>;
-
-  update<T> (Type: (new () => T), 
-    data: T| T[], url?: string): Observable<any>;
-
-  delete<T> (Type: (new () => T), 
-    url?: string, data?: T | T[]): Observable<any>;
-}
-
-export const ITypes = {
-  IStore: Symbol('IStore'),
-  ISession: Symbol('ISession'),
-  IAuth: Symbol('IAuth'),
-  IMutex: Symbol('IMutex'),
-  IConfig: Symbol('IConfig'),
-  IEasy: Symbol('IEasy'),
-  IAccess: Symbol('IAccess')
+  delete<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any>;
+  deleteDataById<T> (Type: (new () => T), data: T | T[], url?: string, id?: any): Observable<any>;
 }

@@ -11,6 +11,11 @@ export interface IStore {
 
 export interface ISession {}
 
+export enum AuthType {
+  TOKEN_AUTH,
+  SESSION_AUTH
+}
+
 export interface IAuth {
   login(loginParams: Object): Observable<any>;
   logout(): Observable<any>;

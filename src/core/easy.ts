@@ -1,9 +1,9 @@
-import { Cache } from './fetch/cache';
-import { Mutex } from './fetch/mutex';
-import { create, Cachable } from './util/util';
+import { Cache } from '../fetch/cache';
+import { Mutex } from '../fetch/mutex';
+import { create, Cachable } from '../util/util';
 import { Observable } from 'rxjs/Rx';
 import * as _ from 'lodash';
-import { Actions } from './fetch/actions';
+import { Actions } from '../fetch/actions';
 import { injectable, inject } from "inversify";
 import { ITypes, IEasy } from './core'
 
@@ -64,7 +64,7 @@ export class Easy implements IEasy {
     return Actions.deleteData(Type, url, data);
   }
 
-  public deleteDataById<T> (Type: (new () => T), url?: string, id?: any): Observable<any> {
-    return Actions.deleteDataById(Type, id, url);
+  public deleteDataById<T> (Type: (new () => T), data: T | T[], url?: string, id?: any): Observable<any> {
+    return Actions.deleteDataById(Type, data, id, url);
   }
 }

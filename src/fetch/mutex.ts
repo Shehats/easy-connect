@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Rx';
 import { Cachable } from '../util/util';
 import { Actions } from './actions';
 import { Store } from './store';
-import { IStore, IMutex, ITypes } from '../core';
+import { IStore, IMutex, ITypes } from '../core/core';
 import * as _ from 'lodash';
 import { injectable, inject } from "inversify";
 

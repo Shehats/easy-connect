@@ -1,7 +1,7 @@
 import { Token } from './auth-util';
 import { Cache } from '../fetch/cache';
 import { Observable } from 'rxjs/Rx';
-import { IAuth, IConfig, ITypes } from '../core'
+import { IAuth, IConfig, ITypes } from '../core/core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { injectable, inject } from "inversify";
 

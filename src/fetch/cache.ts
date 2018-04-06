@@ -8,6 +8,7 @@ export class Cache {
     return Observable.fromPromise(_storage.getItem((typeof key === "string")? key : getName(create(key))));
   }
   public static setItem<T extends Cachable>(key: (new () => T) | string, data: T[]|T): Observable<T[]|T> {
+    console.log('caching')
     return Observable.fromPromise(_storage.setItem((typeof key === "string")? key : getName(create(key)), data));
   }
   public static setItemByKey<T extends Cachable> (key: (new () => T) | string, data: T[]|T, id: any): Observable<T[]|T> {

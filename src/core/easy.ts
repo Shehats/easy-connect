@@ -25,7 +25,7 @@ export class Easy implements IEasy {
     })
   }
 
-  public getByKey<T> (Type: (new () => T), 
+  public getById<T> (Type: (new () => T), 
     id: any,
     force?: boolean,
     url?: string): Observable<T|T[]> {

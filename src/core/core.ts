@@ -44,9 +44,12 @@ export interface IConfig {
 
 export interface IEasy {
   getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]>;
-  getByKey<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T|T[]>;
+  getById<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T|T[]>;
+  getByFilter<T> (Type: (new () => T), key: any, force?: boolean, url?: string): Observable<T>;
+  query <T> (Type: (new () => T), args: string, url?: string): Observable<T[]>;
   create<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any>;
   update<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any>;
+  updateById <T> (Type: (new () => T), data: T| T[], id?: any, url?: string): Observable<any>;
   delete<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any>;
   deleteDataById<T> (Type: (new () => T), data: T | T[], url?: string, id?: any): Observable<any>;
 }

@@ -27,7 +27,7 @@ export class Container<T> {
 
     setInterval(() => {
       this.list.forEach(x => {
-        this.easy.getByKey(this.Type, x[this.id], true)
+        this.easy.getById(this.Type, x[this.id], true)
         .subscribe((g: T) => this.list[g[this.id]] = g)
       })
     }, (this.timeStamp) ? this.timeStamp : this.interval)

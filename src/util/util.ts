@@ -37,7 +37,7 @@ export const cacheable = (expiry?: number) => function (target: Function) {
   Reflect.defineMetadata('cacheable', expiry, target)
 }
 
-export const secure = (value: boolean) => function (target: Function) {
+export const secure = (value?: boolean) => function (target: Function) {
   Reflect.defineMetadata('secure', value, target);
 }
 
@@ -52,7 +52,7 @@ export const accessKey = (instance: any) => Reflect.getMetadata('key', instance.
 
 export const accessQuery = (instance: any) => Reflect.getMetadata('query', instance.constructor);
 
-export const isSecure = (instance: any) => Reflect.getMetadata('secure', instance.constructor);
+export const isSecure = (instance: any) => Reflect.hasMetadata('secure', instance.constructor);
 
 export const cacheExpiry = (instance: any) => Reflect.getMetadata('cacheable', instance.constructor);
 

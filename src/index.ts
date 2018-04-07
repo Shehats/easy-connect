@@ -34,3 +34,5 @@ export {
   IStore, 
   IEasy,
   AuthType } from './core/core';
+
+export { Container } from './core/async-object';

@@ -10,8 +10,8 @@ import { IEasy, IMutex } from './core';
 export class Easy implements IEasy {
   private mutex: IMutex;
 
-  constructor(mutex?: IMutex) {
-    this.mutex = mutex || Mutex.Instance;
+  constructor() {
+    this.mutex = Mutex.Instance;
   }
 
   public getAll<T> (Type: (new () => T),

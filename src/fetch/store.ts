@@ -17,11 +17,11 @@ export class Store implements IStore{
   }
 
   public getData<T> (key: (new () => T)): Observable<T|T[]> {
-    return Observable.from(this.contents[getName(create(key))]);
+    return Observable.of(this.contents[getName(create(key))]);
   }
 
   public getDataByKey<T> (key: (new () => T), id: any): Observable<T> {
-    return Observable.from(this.contents[getName(create(key))][id]);
+    return Observable.of(this.contents[getName(create(key))][id]);
   }
 
   public putData<T> (key: (new () => T), data: Observable<T|T[]>): Observable<T|T[]> {

@@ -35,4 +35,4 @@ export {
   IEasy,
   AuthType } from './core/core';
 
-export { Container } from './core/async-object';
+export { Container } from './core/container';

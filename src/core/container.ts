@@ -33,10 +33,6 @@ export class Container<T> {
     }, (this.timeStamp) ? this.timeStamp : this.interval)
   }
 
-  private data() {
-
-  }
-
   public get All(): T[] {
     return this.list;
   }

@@ -6,33 +6,35 @@ import { create,
 
 export class Container<T> {
   private easy: Easy;
-  private list: T[];
-  private querySet: T[];
+  private list: T[] = [];
+  private querySet: T[] = [];
   private interval: number;
   private timeStamp: number;
   private Type: (new () => T);
   private id: any;
 
-  constructor(interval?: number) {
-    this.id = access(create(this.Type));
+  constructor(Type: (new () => T), interval?: number) {
+    this.Type = Type;
+    let _key= access(create(this.Type));
+    this.id = _key.id;
     this.easy = new Easy();
-    this.interval = interval || 30000;
-    this.easy.getAll(this.Type)
+    this.interval = interval || 3000;
+    this.easy.getAll(this.Type, true)
     .subscribe((x:T[]) => {
-      this.list = x;
+      x.forEach(y => this.list.push(y))
       this.timeStamp = (this.interval/this.list.length);
-      Observable.interval(this.timeStamp || this.interval,
-        (this.timeStamp)
-        ? _.forEach(this.list, y => {
-          this.easy.getByKey(this.Type, y[this.id])
-          .subscribe((g:T) => {
-            this.list[g[this.id]] = g;
-          })
-        }) 
-        : this.easy.getAll(this.Type)
-          .subscribe((g:T[]) => this.list = g)
-        )
     })
+
+    setInterval(() => {
+      this.list.forEach(x => {
+        this.easy.getByKey(this.Type, x[this.id], true)
+        .subscribe((g: T) => this.list[g[this.id]] = g)
+      })
+    }, (this.timeStamp) ? this.timeStamp : this.interval)
+  }
+
+  private data() {
+
   }
 
   public get All(): T[] {
@@ -45,7 +47,9 @@ export class Container<T> {
 
   public query(args: string): void {
     this.easy.query(this.Type, args)
-    .subscribe(x => this.querySet = x)
+    .subscribe((x:T[]) => x.forEach(y => {
+      this.querySet.push(y);
+    }))
   }
 
   public add(data: T): void {

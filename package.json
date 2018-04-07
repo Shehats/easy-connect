@@ -1,6 +1,6 @@
 {
   "name": "easy-connect",
-  "version": "0.1.23.4",
+  "version": "0.1.26",
   "description": "A package that implements http fetching from rest api, scheduled cache and socket connections.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

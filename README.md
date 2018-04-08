@@ -184,6 +184,8 @@ this.auth.validate(); // observable of any.
 ##### You can even not use the container and use the convenience decorator @container which does the same job as the Container class yet it creates only a singleton Container per class and it has methods to get data from the container.
 
 ```javascript
+export { container, All, Add, Query, executeQuery, Update, Delete } from 'easy-connect';
+
 @container()
 @api({
   baseUrl: 'your api url',

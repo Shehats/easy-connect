@@ -163,9 +163,7 @@ class myClass {
       loginUrl: 'Your api login url',
       logoutUrl: 'Your api logout url',
       registerUrl: 'Your api registeration url',
-      validateUrl: 'your api validation url',
-      prefix: 'your api token prefix', // If empty it assumes that it is Bearer 
-      key:'Your api token key in body if returned in the body'
+      validateUrl: 'your api validation url'
     });
   }
 }

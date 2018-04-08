@@ -1,5 +1,5 @@
 # easy-connect
-A package makes life easier. Joking, it does the next best thing. It facilitates http requests and authentications, session caching and local caching in angular4.x, react.js and vue.js 2. The packages seeks to eleminate boilerplate code by inversion of control using containers and convenience annotations:
+A package makes life easier. Joking, it does the next best thing. It facilitates http requests and authentications, session caching and local caching and instantiaing instances in runtime in angular4.x, react.js and vue.js 2. The packages seeks to eleminate boilerplate code by inversion of control using containers and convenience annotations:
 
 To install it:
 
@@ -184,7 +184,7 @@ this.auth.validate(); // observable of any.
 ##### You can even not use the container and use the convenience decorator @container which does the same job as the Container class yet it creates only a singleton Container per class and it has methods to get data from the container.
 
 ```javascript
-export { container, All, Add, Query, executeQuery, Update, Delete } from 'easy-connect';
+import { container, All, Add, Query, executeQuery, Update, Delete } from 'easy-connect';
 
 @container()
 @api({

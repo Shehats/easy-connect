@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/do'
-import { getName, create } from '../util/util';
-import { IStore, ISession } from '../core/core';
+import { getName, create } from '../util';
+import { IStore, ISession } from '../core';
 
 export class Store implements IStore{
   contents: ISession;

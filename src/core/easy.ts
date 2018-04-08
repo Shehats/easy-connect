@@ -1,11 +1,9 @@
-import { Cache } from '../fetch/cache';
-import { Mutex } from '../fetch/mutex';
-import { Extra } from '../fetch/extra';
-import { create, isCacheable } from '../util/util';
+import { Cache, Mutex,  Extra} from '../fetch';
+import { create, isCacheable } from '../util';
 import { Observable } from 'rxjs/Rx';
 import * as _ from 'lodash';
-import { Actions } from '../fetch/actions';
-import { IEasy, IMutex } from './core';
+import { Actions } from '../fetch';
+import { IEasy, IMutex } from './';
 
 export class Easy implements IEasy {
   private mutex: IMutex;

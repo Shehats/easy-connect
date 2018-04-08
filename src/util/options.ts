@@ -1,5 +1,5 @@
-import { HttpFactory } from '../auth/auth-interceptor';
-import { create, access } from './util';
+import { HttpFactory } from '../auth';
+import { create, access } from './';
 import * as _ from 'lodash';
 
 export function construct<T> (Type: (new () => T), url: string, id: any): Promise<T> {

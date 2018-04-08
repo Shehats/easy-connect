@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { Observable } from 'rxjs/Rx';
-import { Cache } from '../fetch/cache';
-import { Token } from './auth-util';
-import { create, isSecure } from '../util/util';
+import { Cache } from '../fetch';
+import { Token } from './';
+import { create, isSecure } from '../util';
 
 export class HttpFactory {
   public static getHttp <T> (type: (new () => T)): Observable<AxiosInstance> {

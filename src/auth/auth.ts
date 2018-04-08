@@ -1,7 +1,7 @@
-import { Token } from './auth-util';
-import { Cache } from '../fetch/cache';
+import { Token } from './';
+import { Cache } from '../fetch';
 import { Observable } from 'rxjs/Rx';
-import { IAuth, IConfig } from '../core/core'
+import { IAuth, IConfig } from '../core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 export class EasyTokenAuth implements IAuth {

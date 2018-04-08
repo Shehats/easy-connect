@@ -2,8 +2,8 @@ import { Observable } from 'rxjs/Rx';
 import * as _ from 'lodash';
 import { create,
          access,
-         accessQuery } from '../util/util';
-import { constructArray } from '../util/options';
+         accessQuery, 
+         constructArray } from '../util';
 
 export class Extra {
   public static query <T> (Type: (new () => T), args: string, url?: string): Observable<T[]> {

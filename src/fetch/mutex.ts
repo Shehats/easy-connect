@@ -1,8 +1,6 @@
 import { Observable } from 'rxjs/Rx';
-import { Cachable } from '../util/util';
-import { Actions } from './actions';
-import { Store } from './store';
-import { IStore, IMutex } from '../core/core';
+import { Actions, Store } from './';
+import { IStore, IMutex } from '../core';
 import * as _ from 'lodash';
 
 export class Mutex implements IMutex {

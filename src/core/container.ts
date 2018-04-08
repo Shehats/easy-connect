@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs/Rx';
-import { Easy } from './easy';
+import { Easy } from './';
 import * as _ from 'lodash';
 import { create, 
-         access } from '../util/util';
+         access } from '../util';
 
 export class Container<T> {
   private easy: Easy;
@@ -15,7 +15,10 @@ export class Container<T> {
 
   constructor(Type: (new () => T), interval?: number) {
     this.Type = Type;
+    console.log(this.Type)
+    console.log(access(create(this.Type)))
     let _key= access(create(this.Type));
+    console.log(_key)
     this.id = _key.id;
     this.easy = new Easy();
     this.interval = interval || 3000;

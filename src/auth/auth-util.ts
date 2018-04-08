@@ -1,4 +1,4 @@
-import {cacheable} from '../util/util';
+import { cacheable } from '../util';
 
 @cacheable()
 export class Token {

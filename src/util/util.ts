@@ -59,5 +59,3 @@ export const cacheExpiry = (instance: any) => Reflect.getMetadata('cacheable', i
 export const isCacheable = (instance: any) => Reflect.hasMetadata('cacheable', instance.constructor)
 
 export const getName = (instance: any): string => instance.constructor.name;
-
-export abstract class Cachable {}

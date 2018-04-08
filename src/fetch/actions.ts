@@ -4,12 +4,12 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import { create, 
          access,
-         accessKey } from '../util/util';
-import { construct, 
-        constructArray, 
-        createApiData, 
-        updateApiData, 
-        deleteApiData } from '../util/options';
+         accessKey,
+         construct, 
+         constructArray, 
+         createApiData, 
+         updateApiData, 
+         deleteApiData } from '../util';
 
 export class Actions {
   public static getData<T> (Type: (new () => T), url?: string): Observable<T[]> {

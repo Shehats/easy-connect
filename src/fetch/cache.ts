@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Rx';
 import * as _storage from 'localforage';
-import { getName, create, Cachable } from '../util/util';
+import { getName, create } from '../util';
 import * as _ from 'lodash';
 
 export class Cache {

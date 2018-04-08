@@ -180,3 +180,45 @@ this.auth.validate(); // observable of any.
 
 #### Currently working on drivers for Angular 4.x, React.js and Vue.js to maintain the code structure of the respective frameworks.
 #### The EasyAuth and EasyTokenAuth work for all three.
+
+##### You can even not use the container and use the convenience decorator @container which does the same job as the Container class yet it creates only a singleton Container per class and it has methods to get data from the container.
+
+```javascript
+@container()
+@api({
+  baseUrl: 'your api url',
+  getAll: 'your api route to get all' // can be something like 'all' or just ''.
+  getById: 'your api route to get by id', // can be something like 'id' or just ''.
+  create: 'your api route to create or post for your model', // can be 'anything' or just ''.
+  update: 'your api route to update or put for your model', // can be 'anything' or just ''.
+  updateById: 'your api route to update or put by id if use id to update for your model', // can be 'anything' or just ''.
+  delete: 'your api route to delete for your model', // can be 'anything' or just ''.
+  deleteById: 'your api route to delete by id if use id to delete for your model', // can be 'anything' or just ''.
+  id: 'id' // the parameter that your model uses as an id can be 'id' or 'username' or 'email' it has to be in the model.
+})
+@cacheable()
+class User {
+  id: number;
+  name: string;
+  email: string;
+
+  saysmth(): string {
+    return this.name;
+  }
+}
+
+class myClass {
+  users: User[];
+  query: User[];
+  
+  constructor() {
+  this.users = All(User); // gets all users array updates them every 15 seconds and caches them if they are cacheable;
+  executeQuery(User, 'awesome') // Queries the user awesome
+  this.query = Query(User); // links the query result to the query array
+  Add(User, myUser); // adds a user to the list and to the api end point.
+  Update(User, myUser); // updates a user in a list and to the api end point.
+  Delete(User, myUser); // delete a user from the list and from the api.
+  }
+}
+
+```

@@ -2,7 +2,8 @@ import { Observable, Subscription } from 'rxjs/Rx';
 import { Easy } from './';
 import * as _ from 'lodash';
 import { create, 
-         access } from '../util';
+         access,
+         accessQuery } from '../util';
 
 export class Container<T> {
   private easy: Easy;
@@ -85,10 +86,15 @@ export class Container<T> {
   }
 
   public query(args: string): void {
+    let _query = accessQuery(create(this.Type));
     this.easy.query(this.Type, args)
-    .subscribe((x:T[]) => x.forEach(y => {
-      this.querySet.push(y);
-    }))
+    .subscribe(
+      (x:T[]) => x.forEach(y => {
+      this.querySet.push(y);}),
+      _ => {
+        this.querySet = _.filter(this.list, x => (x[_query.queryKey] == args))
+      }
+    )
   }
 
   public add(data: T): void {

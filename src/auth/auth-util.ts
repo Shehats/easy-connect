@@ -1,6 +1,3 @@
-import { cacheable } from '../util';
-
-@cacheable()
 export class Token {
   prefix: string;
   token: string;

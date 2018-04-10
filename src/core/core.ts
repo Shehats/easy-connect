@@ -45,7 +45,7 @@ export interface IConfig {
 export interface IEasy {
   getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]>;
   getById<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T|T[]>;
-  getByFilter<T> (Type: (new () => T), key: any, force?: boolean, url?: string): Observable<T>;
+  getByFilter<T> (Type: (new () => T), key: any, force?: boolean, url?: string): Observable<T|T[]>;
   query <T> (Type: (new () => T), args: string, url?: string): Observable<T[]>;
   create<T> (Type: (new () => T), data: T | T[], url?: string): Observable<any>;
   update<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any>;

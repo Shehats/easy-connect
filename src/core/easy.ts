@@ -20,7 +20,9 @@ export class Easy implements IEasy {
     .do(x => {
       if (isCacheable(create(Type))) 
         Cache.setItem(Type, x); 
-    })
+    }).catch(err => isCacheable(create(Type))
+      ? Cache.getItem(Type)
+      : Observable.throw("Couldn't get the data"));
   }
 
   public getById<T> (Type: (new () => T), 
@@ -31,18 +33,22 @@ export class Easy implements IEasy {
     .do(x => {
       if (isCacheable(create(Type)))
         Cache.setItemByKey(Type, x, id);
-    })
+    }).catch(err => isCacheable(create(Type))
+      ? Cache.getItem(Type)
+      : Observable.throw("Couldn't get the data"));
   }
 
   public getByFilter<T> (Type: (new () => T), 
     key: any, 
     force?: boolean, 
-    url?: string): Observable<T> {
+    url?: string): Observable<T|T[]>{
     return this.mutex.getByFilter(Type, key, force, url)
     .do(x => {
       if (isCacheable(create(Type)))
         Cache.setItemByKey(Type, x, key);
-    })
+    }).catch(err => isCacheable(create(Type))
+      ? Cache.getItem(Type)
+      : Observable.throw("Couldn't get the data"));
   }
 
   public query <T> (Type: (new () => T), args: string, url?: string): Observable<T[]> {

@@ -9,7 +9,9 @@ export class EasyTokenAuth implements IAuth {
   config: IConfig;
 
   constructor (config: IConfig) {
-    this.token = new Token(config.prefix, config.key);
+    this.token = new Token();
+    this.token.prefix = config.prefix;
+    this.token.key = config.key;
     this.config = config;
   }
 

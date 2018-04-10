@@ -35,6 +35,11 @@ import { api, query, secure, cacheable } from 'easy-connect';
 @secure()
 // If you want to cache your model use it cache data automatically
 @cacheable()
+@key({
+  filterKey: 'name', /// if filter by name
+  filterUrl: 'You api url filter', // if have a url for ur filter
+  appendBaseUrl: true // you want to append the url to baseUrl in api
+})
 export class User {
   id: number;
   firstName: string;

@@ -3,7 +3,9 @@ import { Cache } from '../fetch';
 import { Observable } from 'rxjs/Rx';
 import { IAuth, IConfig } from '../core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import { EasySingleton } from 'easy-injectionjs';
 
+@EasySingleton('TOKEN_AUTH')
 export class EasyTokenAuth implements IAuth {
   token: Token;
   config: IConfig;
@@ -41,6 +43,7 @@ export class EasyTokenAuth implements IAuth {
 
 }
 
+@EasySingleton('SESSION_AUTH')
 export class EasyAuth implements IAuth{
   config: IConfig;
 

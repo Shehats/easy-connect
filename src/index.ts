@@ -3,6 +3,7 @@ export { api,
          query,
          secure,
          cacheable } from './util';
+         
 export { IAuth,
          IConfig,
          Easy,
@@ -13,7 +14,8 @@ export { IAuth,
          Query,
          executeQuery,
          Update,
-         Delete } from './core';
+         Delete,
+         AuthType } from './core';
 
 export { Token,
          HttpFactory, 

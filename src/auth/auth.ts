@@ -3,14 +3,14 @@ import { Cache } from '../fetch';
 import { Observable } from 'rxjs/Rx';
 import { IAuth, IConfig } from '../core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { EasySingleton } from 'easy-injectionjs';
+import { EasySingleton, is } from 'easy-injectionjs';
 
 @EasySingleton('TOKEN_AUTH')
 export class EasyTokenAuth implements IAuth {
   token: Token;
   config: IConfig;
 
-  constructor (config: IConfig) {
+  constructor (config: IConfig = is('config')) {
     this.token = new Token();
     this.token.prefix = config.prefix;
     this.token.key = config.key;
@@ -47,7 +47,7 @@ export class EasyTokenAuth implements IAuth {
 export class EasyAuth implements IAuth{
   config: IConfig;
 
-  constructor (config: IConfig) {
+  constructor (config: IConfig = is('config')) {
     this.config = config;
   }
 

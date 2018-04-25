@@ -10,9 +10,11 @@ import { create,
          createApiData, 
          updateApiData, 
          deleteApiData } from '../util';
+import { EasySingleton } from 'easy-injectionjs';
 
+@EasySingleton()
 export class Actions {
-  public static getData<T> (Type: (new () => T), url?: string): Observable<T[]> {
+  public getData<T> (Type: (new () => T), url?: string): Observable<T[]> {
     let _keys = access(create(Type));
     return (url)
     ? Observable.fromPromise(constructArray(Type, url))
@@ -21,7 +23,7 @@ export class Actions {
     : Observable.throw('No data url was defined.');
   }
 
-  public static getDataById <T> (Type: (new () => T), id: any, url?: string): Observable<T> {
+  public getDataById <T> (Type: (new () => T), id: any, url?: string): Observable<T> {
     let _keys = access(create(Type));
     return (url && id)
     ? Observable.fromPromise(construct(Type, _keys.baseUrl + '/' + url, id))
@@ -30,7 +32,7 @@ export class Actions {
     : Observable.throw('No data url or id was defined.');
   }
 
-  public static getDataByFilter <T> (Type: (new () => T), key: any, url?: string): Observable<T> {
+  public getDataByFilter <T> (Type: (new () => T), key: any, url?: string): Observable<T> {
     let _keys = access(create(Type));
     let _accessor = accessKey(create(Type));
     return (url)
@@ -42,7 +44,7 @@ export class Actions {
     : Observable.throw('No data url or key was defined.');
   }
 
-  public static postData <T> (Type: (new () => T), data: T | T[], url?: string): Observable<any> {
+  public postData <T> (Type: (new () => T), data: T | T[], url?: string): Observable<any> {
     let _keys = access(create(Type));
     return (url)
     ? Observable.fromPromise(createApiData(Type, url, data))
@@ -51,7 +53,7 @@ export class Actions {
     : Observable.throw('No data url was defined.');
   }
 
-  public static updateData<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any> {
+  public updateData<T> (Type: (new () => T), data: T| T[], url?: string): Observable<any> {
     let _keys = access(create(Type));
     return (url)
     ? Observable.fromPromise(updateApiData(Type, url, data))
@@ -60,7 +62,7 @@ export class Actions {
     : Observable.throw('No data url was defined.'); 
   }
 
-  public static updateDataById<T> (Type: (new () => T), data: T| T[], id?: any, url?: string): Observable<any> {
+  public updateDataById<T> (Type: (new () => T), data: T| T[], id?: any, url?: string): Observable<any> {
     let _keys = access(create(Type));
     return (url)
     ? Observable.fromPromise(updateApiData(Type, (id)
@@ -73,7 +75,7 @@ export class Actions {
     : Observable.throw('No data url was defined.');
   }
 
-  public static deleteData<T> (Type: (new () => T), url?: string, data?: T | T[]): Observable<any> {
+  public deleteData<T> (Type: (new () => T), url?: string, data?: T | T[]): Observable<any> {
     let _keys = access(create(Type));
     return (url)
     ? Observable.fromPromise(deleteApiData(Type, url, data))
@@ -82,7 +84,7 @@ export class Actions {
     : Observable.throw('No data url was defined.');
   }
 
-  public static deleteDataById<T> (Type: (new () => T), data: T| T[], id?: any, url?: string): Observable<any> {
+  public deleteDataById<T> (Type: (new () => T), data: T| T[], id?: any, url?: string): Observable<any> {
     let _keys = access(create(Type));
     return (url)
     ? Observable.fromPromise(updateApiData(Type, (id)

@@ -3,17 +3,13 @@ import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/do'
 import { getName, create } from '../util';
 import { IStore, ISession } from '../core';
+import { Easy, EasySingleton } from 'easy-injectionjs';
 
+@EasySingleton('STORE')
 export class Store implements IStore{
-  contents: ISession;
-  private static _instance: Store;
-
-  private constructor () {
+  private contents: ISession;
+  constructor () {
     this.contents= new class implements ISession {}()
-  }
-
-  public static get Instance() {
-    return this._instance || (this._instance = new this());
   }
 
   public getData<T> (key: (new () => T)): Observable<T|T[]> {

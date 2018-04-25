@@ -1,114 +1,94 @@
 import { Observable, Subscription } from 'rxjs/Rx';
-import { Easy } from './';
+import { EasyConnect } from './';
 import * as _ from 'lodash';
 import { create, 
          access,
          accessQuery } from '../util';
+import { Easy, EasyPrototype, Easily, is} from 'easy-injectionjs';
 
-export class Container<T> {
-  private easy: Easy;
-  private list: T[];
-  private checkedList: T[];
-  private listSub: Subscription;
-  private subArr: Subscription[];
-  private querySet: T[];
-  private interval: number;
-  private Type: (new () => T);
-  private id: any;
+@EasyPrototype()
+export class Container {
+  @Easy()
+  private _easy: EasyConnect;
+  public _all: Subscription;
+  public _query: Subscription;
+  private _id: any;
+  private _key: any;
 
-  constructor(Type: (new () => T), interval?: number) {
-    this.Type = Type;
-    let _key= access(create(this.Type));
-    this.id = _key.id;
-    this.easy = new Easy();
-    this.interval = interval || 30000;
-    let obs = this.easy.getAll(this.Type)
-                     .map((x: T[]) => x);
-    this.listSub = this.createSub(obs, (val: T[]) => this.setData(obs, val))
+  constructor(private _type: {new(...args:any[]):{}} = is('CURRENT')) {
   }
 
-  private assure(lis: T[]): void {
-    this.subArr = new Array<Subscription>();
-    setInterval(() => {
-      _.each(lis, x => {
-        if (this.id) {
-          let obs = this.easy.getById(this.Type, x[this.id]).map((x:T) => x);
-          this.subArr.push(this.createSub(obs, (val: T) => this.setSubData(obs, val)));
-        } else {
-          this.dispose(this.listSub);
-          let obs = this.easy.getAll(this.Type)
-                     .map((x: T[]) => x);
-          this.listSub = this.createSub(obs, (val: T[]) => this.setData(obs, val));
-        }
-      })
-    }, this.interval)
+  private createSubArray <T extends {new(...args:any[]):{}}> 
+    (sub: Subscription,
+     obs: Observable<Object|Object[]>,
+     prefix: string,
+     errCallBack?: any): Subscription {
+  	return sub || (sub = obs.subscribe({
+  		next: (arr: T[]) => {
+  			Easily(prefix+this._type.name, arr);
+  		},
+  		error: (errCallBack)? errCallBack: (err: any) =>{ throw err }
+  	}))
   }
 
-  private createSub(obs: Observable<T|T[]>, updateNext: any): Subscription {
-    return obs.subscribe({next: updateNext, error: (err:any) => {throw err}})
+  private removeSub() {
+  	if(this._all)
+  		this._all.unsubscribe()
+  	if (this._query)
+  		this._query.unsubscribe()
   }
 
-  private setData(lis: Observable<T[]>, val: T[]) {
-    if (!this.list || this.list.length != val.length)
-      this.list = val;
-    else {
-      _.each(val, (x, index) => {
-        if (this.list[index] != x)
-          this.list[index] = x;
-      })
+  private ensure() {
+    if (!this._key || !this._id) {
+      let data = create(this._type);
+      let _key= access(data);
+      this._key = accessQuery(data);
+      this._id = _key.id;
     }
-    this.assure(this.list);
   }
 
-  private setSubData(item: Observable<T>, val: T) {
-    let x: T = null;
-    let i: number;
-    _.each(this.list, (y, index) => {
-      if (y[this.id] == val[this.id]) {
-        x = y;
-        i = index;
-      }
-    })
-    if (x)
-      this.list[i] = val;
+  public All(): Subscription {
+    this.ensure();
+  	return this.createSubArray(this._all, this._easy.getAll(this._type),'ALL_');
   }
 
-  private dispose(sub: Subscription): void {
-    sub.unsubscribe();
+  public Query <T extends {new(...args:any[]):{}}> (args: string): Subscription {
+    this.ensure();
+  	return this.createSubArray(this._query, this._easy.query(this._type, args),
+  		'QUERY_', () => {
+  		let arr: T[] = is('ALL_'+this._type.name);
+  		arr.filter(x => x[this._key] == args)
+  		Easily('QUERY_'+this._type.name, arr);
+  	});	
   }
 
-  public get All(): T[] {
-    return this.list;
+  public add <T extends {new(...args:any[]):{}}> (data: T): void {
+  	this.removeSub();
+  	this._easy.create(this._type, data)
+    .subscribe(_ => {
+    	let arr: T[] = is('ALL_'+this._type.name);
+    	arr.push(data)
+    	Easily('ALL_'+this._type.name, arr,);
+    });
   }
 
-  public get QuerySet(): T[] {
-    return this.querySet;
+  public update <T extends {new(...args:any[]):{}}> (data: T): void {
+  	this.removeSub();
+    this._easy.update(this._type, data)
+    .subscribe(_ => {
+    	let arr: T[] = is('ALL_'+this._type.name);
+    	arr[data[this._id]] = data
+    	Easily('ALL_'+this._type.name, arr);
+    });
   }
 
-  public query(args: string): void {
-    let _query = accessQuery(create(this.Type));
-    this.easy.query(this.Type, args)
-    .subscribe(
-      (x:T[]) => x.forEach(y => {
-      this.querySet.push(y);}),
-      _ => {
-        this.querySet = _.filter(this.list, x => (x[_query.queryKey] == args))
-      }
-    )
-  }
-
-  public add(data: T): void {
-    this.easy.create(this.Type, data)
-    .subscribe(_ => this.list.push(data))
-  }
-
-  public update(data: T): void {
-    this.easy.update(this.Type, data)
-    .subscribe(_ => this.list[data[this.id]] = data)
-  }
-
-  public delete(data: T): void {
-    this.easy.delete(this.Type, data)
-    .subscribe(_ => this.list.splice(this.list.indexOf(data,0), 1))
+  public delete <T extends {new(...args:any[]):{}}> (data: T): void {
+  	this.removeSub();
+    this._easy.delete(this._type, data)
+    .subscribe(_ => {
+    	let arr: T[] = is('ALL_'+this._type.name);
+    	arr.splice(arr.indexOf(data,0), 1);
+    	Easily('ALL_'+this._type.name, arr);
+    });
   }
 }

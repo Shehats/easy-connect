@@ -1,32 +1,38 @@
 import { Container } from './';
 import { getName, create, api } from '../util';
+import { EasySingleton, is, Easily } from 'easy-injectionjs';
+import { Subscription } from 'rxjs/Rx'
 
 interface Content {}
 
+@EasySingleton()
 export class Compose {
   private content: Content;
-  private static _instance: Compose;
-  private constructor () {
+
+  constructor () {
     this.content = new class implements Content {}();
   }
 
-  public static get Instance() {
-    return this._instance || (this._instance = new this());
-  }
-
-  public getContainer<T> (Type: (new () => T)): Container<T> {
-    return this.content[getName(create(Type))] || (this.content[getName(create(Type))] = new Container<T>(Type));
+  public getContainer<T> (Type: (new () => T)): Container {
+  	let _container: Container = this.content[getName(create(Type))];
+  	if (!_container) {
+  		Easily('CURRENT', Type);
+  		_container = (this.content[getName(create(Type))] = is(Container));
+  	}
+    return _container
   }
 }
 
 export const container = () => function (target) {
-  let value = (Compose.Instance).getContainer(target);
+  let value: Container = is(Compose).getContainer(target);
+  value.All()
   Reflect.defineMetadata('container', value, target);
 }
 
-export const All = (target) => (Reflect.getMetadata('container', create(target).constructor)).All;
-export const executeQuery = (target, args: string) => (Reflect.getMetadata('container', create(target).constructor)).query(args);
-export const Query = (target) => (Reflect.getMetadata('container', create(target).constructor)).QuerySet;
+export const Get_All = (target) => Reflect.getMetadata('container', create(target).constructor).All();
+export const Get_Query = (target, args: string) => (Reflect.getMetadata('container', create(target).constructor)).Query(args);
 export const Add = (target, data) => (Reflect.getMetadata('container', create(target).constructor)).add(data);
 export const Update = (target, data) => (Reflect.getMetadata('container', create(target).constructor)).update(data);
 export const Delete = (target, data) => (Reflect.getMetadata('container', create(target).constructor)).delete(data);
+export const All = <T extends {new(...args:any[]):{}}> (target: T) => <any[]>  is('ALL_'+target.name);
+export const Query = <T extends {new(...args:any[]):{}}> (target: T) => <any[]> is('QUERY_'+target.name);

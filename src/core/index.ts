@@ -1,14 +1,3 @@
-export { Container } from './container';
-
-export { Compose, 
-         container,
-         All,
-         Add,
-         Query,
-         executeQuery,
-         Update,
-         Delete } from './compose';
-
 export { AuthType,
          IAuth,
          IConfig,
@@ -18,4 +7,16 @@ export { AuthType,
          IStore,
          ISession } from './core';
 
-export { Easy } from './easy';
+export { EasyConnect } from './easy';
+
+export { Container } from './container';
+
+export { Compose, 
+         container,
+         All,
+         Add,
+         Query,
+         Update,
+         Delete,
+         Get_All, 
+         Get_Query } from './compose';

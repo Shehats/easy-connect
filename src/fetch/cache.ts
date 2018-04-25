@@ -2,9 +2,11 @@ import { Observable } from 'rxjs/Rx';
 import * as _storage from 'localforage';
 import { getName, create } from '../util';
 import * as _ from 'lodash';
+import { Easy, EasySingleton } from 'easy-injectionjs';
 
+@EasySingleton()
 export class Cache {
-  public static getItem<T>(key: (new () => T)): Observable<T[]|T>{
+  public getItem<T>(key: (new () => T)): Observable<T[]|T>{
     let _key = getName(create(key));
     let items: T[] = [];
     return Observable.fromPromise(
@@ -15,7 +17,7 @@ export class Cache {
         : this.construct(key,x as Object)))
   }
 
-  private static constructArray<T> (type: (new () => T), x: Object[]) {
+  private constructArray<T> (type: (new () => T), x: Object[]) {
     let _key = getName(create(type));
     let items: T[] = [];
     _.forEach(x, y => {
@@ -28,7 +30,7 @@ export class Cache {
     return items;
   }
 
-  private static construct<T> (type: (new () => T), x: Object) {
+  private construct<T> (type: (new () => T), x: Object) {
     let _data = create(type);
     _.forEach(Object.getOwnPropertyNames(x), key => {
         _data[key] = x[key]
@@ -36,19 +38,19 @@ export class Cache {
     return _data;
   }
 
-  public static setItem<T>(key: (new () => T) | string, data: T[]|T): Observable<T[]|T> {
+  public setItem<T>(key: (new () => T) | string, data: T[]|T): Observable<T[]|T> {
     return Observable.fromPromise(_storage.setItem((typeof key === "string")? key : getName(create(key)), data));
   }
   
-  public static setItemByKey<T> (key: (new () => T), data: T[]|T, id: any): Observable<T[]|T> {
-    return Cache.getItem(key)
+  public setItemByKey<T> (key: (new () => T), data: T[]|T, id: any): Observable<T[]|T> {
+    return this.getItem(key)
     .flatMap(x => {
       x[id] = data;
-      return Cache.setItem(key,x)
+      return this.setItem(key,x)
     });
   }
 
-  public static setAsyncItemByKey <T> (key: (new () => T), data: Observable<T[]|T>, id: any): Observable<T[]|T> {
+  public setAsyncItemByKey <T> (key: (new () => T), data: Observable<T[]|T>, id: any): Observable<T[]|T> {
     return data.do((x: T[]|T) => {
         _storage.getItem(getName(create(key)))
         .then(y => {
@@ -58,7 +60,7 @@ export class Cache {
     });
   }
 
-  public static setAsycItem <T> (key: (new () => T), data: Observable<T[]|T>): Observable<T[]|T> {
+  public setAsycItem <T> (key: (new () => T), data: Observable<T[]|T>): Observable<T[]|T> {
   	return data.do((x: T[]|T) => {
   			_storage.setItem((typeof key === "string")? key : getName(create(key)), x)
   	});

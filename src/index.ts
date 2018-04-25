@@ -6,16 +6,17 @@ export { api,
          
 export { IAuth,
          IConfig,
-         Easy,
+         EasyConnect,
          Container,
          container,
          All,
          Add,
          Query,
-         executeQuery,
          Update,
          Delete,
-         AuthType } from './core';
+         AuthType,
+         Get_All, 
+         Get_Query } from './core';
 
 export { Token,
          HttpFactory, 

@@ -6,9 +6,7 @@ import { Observable } from 'rxjs/Rx';
 export class AuthFactory implements IAuth {
   private _auth: IAuth;
   constructor (authtype: AuthType = is('AUTH_TYPE')) {
-    this._auth = (authtype = AuthType.TOKEN_AUTH) 
-                 ? is('TOKEN_AUTH')
-                 : is('SESSION_AUTH');
+    this._auth = is((authtype == AuthType.TOKEN_AUTH)? 'TOKEN_AUTH': 'SESSION_AUTH')
   }
 
   public login(loginParams: Object): Observable<any> {

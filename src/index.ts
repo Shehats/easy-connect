@@ -1,21 +1,26 @@
 export { api,
-         key,
+         id,
          query,
          secure,
          cacheable } from './util';
+         
 export { IAuth,
          IConfig,
-         Easy,
+         EasyConnect,
          Container,
          container,
          All,
          Add,
          Query,
-         executeQuery,
          Update,
-         Delete } from './core';
+         Delete,
+         AuthType,
+         Get_All, 
+         Get_Query } from './core';
 
 export { Token,
          HttpFactory, 
          EasyTokenAuth, 
          EasyAuth } from './auth';
+
+export { EasyPrototype, EasySingleton, Easy } from 'easy-injectionjs'

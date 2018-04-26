@@ -3,14 +3,25 @@ import { Observable } from 'rxjs/Rx';
 import { Cache } from '../fetch';
 import { Token } from './';
 import { create, isSecure } from '../util';
+import { EasySingleton, Easy } from 'easy-injectionjs';
 
+@EasySingleton()
 export class HttpFactory {
-  public static getHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
+  private _http: Observable<AxiosInstance>;
+  
+  @Easy()
+  private cache: Cache;
+  
+  public getHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
+    return this._http || this.genHttp(type);
+  }
+
+  private genHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
     let http = axios.create();
-    return isSecure(create(type))
-    ? Cache.getItem(Token).map((x: Token) => { 
+    return isSecure(type)
+    ? this.cache.getItem(Token).map((x: Token) => { 
       http.interceptors.request.use(config => {
-      if (isSecure(create(type)) && x.token) {
+      if (isSecure(type) && x.token) {
         config.headers['post']['Authorization'] = x.prefix + ' ' + x.token;
         config.headers['get']['Authorization'] = x.prefix + ' ' + x.token;
         config.headers['put']['Authorization'] = x.prefix + ' ' + x.token;

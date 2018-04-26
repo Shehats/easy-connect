@@ -4,3 +4,4 @@ dist
 *-lock.json
 AngularExample
 angular
+src/test.ts

@@ -5,7 +5,10 @@ export { AuthType,
          IExtra,
          IMutex,
          IStore,
-         ISession } from './core';
+         ISession,
+         Api,
+         ApiBase,
+         Filter } from './core';
 
 export { EasyConnect } from './easy';
 

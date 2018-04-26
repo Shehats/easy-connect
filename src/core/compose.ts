@@ -14,25 +14,24 @@ export class Compose {
   }
 
   public getContainer<T> (Type: (new () => T)): Container {
-  	let _container: Container = this.content[getName(create(Type))];
+  	let _container: Container = this.content[getName(Type)];
   	if (!_container) {
   		Easily('CURRENT', Type);
-  		_container = (this.content[getName(create(Type))] = is(Container));
+  		_container = (this.content[getName(Type)] = is(Container));
   	}
     return _container
   }
 }
 
-export const container = () => function (target) {
-  let value: Container = is(Compose).getContainer(target);
-  value.All()
-  Reflect.defineMetadata('container', value, target);
+export const container = <T extends {new(...args:any[]):{}}> () => function (target: T) {
+  let _container: Container = is(Compose).getContainer(target);
+  Easily('CONTAINER_'+ target.name, _container)
 }
 
-export const Get_All = (target) => Reflect.getMetadata('container', create(target).constructor).All();
-export const Get_Query = (target, args: string) => (Reflect.getMetadata('container', create(target).constructor)).Query(args);
-export const Add = (target, data) => (Reflect.getMetadata('container', create(target).constructor)).add(data);
-export const Update = (target, data) => (Reflect.getMetadata('container', create(target).constructor)).update(data);
-export const Delete = (target, data) => (Reflect.getMetadata('container', create(target).constructor)).delete(data);
+export const Get_All = <T extends {new(...args:any[]):{}}> (target:T) => (<Container>is('CONTAINER_'+ target.name)).All();
+export const Get_Query = <T extends {new(...args:any[]):{}}> (target: T, args: string) => (<Container>is('CONTAINER_'+ target.name)).Query(args);
+export const Add = <T extends {new(...args:any[]):{}}> (target: T, data) => (<Container>is('CONTAINER_'+ target.name)).add(data);
+export const Update = <T extends {new(...args:any[]):{}}> (target: T, data) => (<Container>is('CONTAINER_'+ target.name)).update(data);
+export const Delete = <T extends {new(...args:any[]):{}}> (target: T, data) => (<Container>is('CONTAINER_'+ target.name)).delete(data);
 export const All = <T extends {new(...args:any[]):{}}> (target: T) => <any[]>  is('ALL_'+target.name);
 export const Query = <T extends {new(...args:any[]):{}}> (target: T) => <any[]> is('QUERY_'+target.name);

@@ -3,7 +3,8 @@ import { EasyConnect } from './';
 import * as _ from 'lodash';
 import { create, 
          access,
-         accessQuery } from '../util';
+         accessQuery,
+         accessId } from '../util';
 import { Easy, EasyPrototype, Easily, is} from 'easy-injectionjs';
 
 @EasyPrototype()
@@ -40,10 +41,8 @@ export class Container {
 
   private ensure() {
     if (!this._key || !this._id) {
-      let data = create(this._type);
-      let _key= access(data);
-      this._key = accessQuery(data);
-      this._id = _key.id;
+      this._key = accessQuery(this._type);
+      this._id = accessId(this._type);
     }
   }
 

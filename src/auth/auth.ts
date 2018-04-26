@@ -5,11 +5,6 @@ import { IAuth, IConfig } from '../core'
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { EasySingleton, is, Easy, Easily } from 'easy-injectionjs';
 
-Easily('CONFIG', {
-   login: 'sal.com'
-})
-
-
 @EasySingleton('TOKEN_AUTH')
 export class EasyTokenAuth implements IAuth {
   @Easy()

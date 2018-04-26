@@ -10,20 +10,3 @@ export const API = {
   key: Symbol('key'),
   id: Symbol('id')
 }
-
-
-@EasySingleton()
-export class Config {
-  @Easy('BaseUrl')
-  private _base: string;
-  @Easy()
-  private _token: Token;
-
-  public get BaseUrl(): string {
-    return this._base;
-  }
-
-  public get AuthToken(): Token {
-    return this._token
-  }
-}

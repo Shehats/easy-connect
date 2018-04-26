@@ -1,51 +1,40 @@
 import "reflect-metadata";
-import { EasySingleton, EasyPrototype, Easily } from 'easy-injectionjs';
+import { Easily, is, EasyPrototype } from 'easy-injectionjs';
+import { ApiBase, Api, Filter } from '../core'
+
+@EasyPrototype()
+export class FilterContainer {} 
 
 // Decorators
-
-export const config = <T extends {new(...args:any[]):{}}> (value: {}): any => function(target: T) {
-  @EasyPrototype()
-  class Data extends target {
-    
-  }
-  var val = Data;
-  return val;
+export const config = <T extends {new(...args:any[]):{}}> (value: ApiBase): any => function(target: T) {
+  Easily('BASE_URL', value.baseUrl)
+  Easily('AUTH_TYPE', value.authtype)
 }
 
-export const api = <T extends {new(...args:any[]):{}}> (value: {
-  baseUrl?: string,
-  getAll?: string,
-  getById?: string,
-  create?: string,
-  update?: string,
-  updateById?: string,
-  delete?: string,
-  deleteById?: string,
-  id?: string,  
-  queryUrl?: string,
-}) => function (target: T): any {
-  Reflect.defineMetadata('api', value, target);
-  @EasyPrototype(target.name)
-  class Data extends target {}
-  let val: T = Data;
-  return val;
+export const api = <T extends {new(...args:any[]):{}}> (value: Api) => function (target: T): any {
+  Easily('API_' + target.name, value);
+}
+
+export const filter = <T extends {new(...args:any[]):{}}> (value: Filter) => function (target: T): any {
+  let _existing: FilterContainer = is('FILTER_' + target.name) || new FilterContainer();
+  _existing[value.filterKey] = value
+  Easily('FILTER_' + target.name, _existing)
 }
 
 export function id (target: Object, key: string) {
-  Easily(target.constructor.name + '_ID', key);
+  Easily('ID_' + target.constructor.name, key);
 }
 
 export function query (target: Object, key: string) {
-  Easily(target.constructor.name + '_QUERY', key);
+  Easily('QUERY_' + target.constructor.name , key);
 }
 
-
-export const cacheable = (expiry?: number) => function (target: Function) {
-  Reflect.defineMetadata('cacheable', expiry, target)
+export const cacheable = <T extends {new(...args:any[]):{}}>(expiry?: number) => function (target: T) {
+  Easily('CACHE_' + target.name, expiry || 7);
 }
 
-export const secure = (value?: boolean) => function (target: Function) {
-  Reflect.defineMetadata('secure', value, target);
+export function secure <T extends {new(...args:any[]):{}}> (target: T) {
+  Easily('SECURE_' + target.name, true);
 }
 
 // Accessors
@@ -53,16 +42,20 @@ export function create<T>(type: (new(...args:any[]) => T)): T {
   return new type();
 }
 
-export const access = (instance: any) => Reflect.getMetadata('api', instance.constructor);
+export const access = <T extends {new(...args:any[]):{}}> (target: T) => is('API_'+target.name)
 
-export const accessKey = (instance: any) => Reflect.getMetadata('key', instance.constructor);
+export const accessId = <T extends {new(...args:any[]):{}}> (target: T) => is('ID_'+target.name)
 
-export const accessQuery = (instance: any) => Reflect.getMetadata('query', instance.constructor);
+export const accessQuery = <T extends {new(...args:any[]):{}}> (target: T) => is('QUERY_'+target.name)
 
-export const isSecure = (instance: any) => Reflect.hasMetadata('secure', instance.constructor);
+export const accessFilter = <T extends {new(...args:any[]):{}}> (target: T, key: string): Filter => is('FILTER_' + target.name)[key]
 
-export const cacheExpiry = (instance: any) => Reflect.getMetadata('cacheable', instance.constructor);
+export const isSecure = <T extends {new(...args:any[]):{}}> (target: T) => is('SECURE_'+target.name)
 
-export const isCacheable = (instance: any) => Reflect.hasMetadata('cacheable', instance.constructor)
+export const isCacheable = <T extends {new(...args:any[]):{}}> (target: T) => is('CACHE_' + target.name)
 
 export const getName = <T extends {new(...args:any[]):{}}> (instance: T): string => instance.name;
+
+export const getBaseUrl = (): string => is('BASE_URL')
+
+

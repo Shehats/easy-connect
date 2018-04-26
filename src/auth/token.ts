@@ -7,8 +7,10 @@ export class Token {
   key: string;
   token: string;
 
-  constructor (/*config: IConfig = is('CONFIG')*/) {
-    // this.prefix = config.prefix
-    // this.key = config.key;
+  constructor (config: IConfig = is('CONFIG')) {
+  	if (config) {
+  		this.prefix = config.prefix
+      this.key = config.key;
+  	}
   }
 }

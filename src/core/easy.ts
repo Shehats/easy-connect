@@ -26,9 +26,9 @@ export class EasyConnect implements IEasy {
     ): Observable<T|T[]> {
     return this.mutex.getAll(Type, force, url)
     .do(x => {
-      if (isCacheable(create(Type))) 
+      if (isCacheable(Type)) 
         this.cache.setItem(Type, x); 
-    }).catch(err => isCacheable(create(Type))
+    }).catch(err => isCacheable(Type)
       ? this.cache.getItem(Type)
       : Observable.throw("Couldn't get the data"));
   }
@@ -39,9 +39,9 @@ export class EasyConnect implements IEasy {
     url?: string): Observable<T|T[]> {
     return this.mutex.getByKey(Type, id, force, url)
     .do(x => {
-      if (isCacheable(create(Type)))
+      if (isCacheable(Type))
         this.cache.setItemByKey(Type, x, id);
-    }).catch(err => isCacheable(create(Type))
+    }).catch(err => isCacheable(Type)
       ? this.cache.getItem(Type)
       : Observable.throw("Couldn't get the data"));
   }
@@ -52,9 +52,9 @@ export class EasyConnect implements IEasy {
     url?: string): Observable<T|T[]>{
     return this.mutex.getByFilter(Type, key, force, url)
     .do(x => {
-      if (isCacheable(create(Type)))
+      if (isCacheable(Type))
         this.cache.setItemByKey(Type, x, key);
-    }).catch(err => isCacheable(create(Type))
+    }).catch(err => isCacheable(Type)
       ? this.cache.getItem(Type)
       : Observable.throw("Couldn't get the data"));
   }

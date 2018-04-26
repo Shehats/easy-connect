@@ -2,29 +2,32 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
+import { Api, Filter } from '../core'
 import { create, 
          access,
-         accessKey,
          construct, 
          constructArray, 
          createApiData, 
          updateApiData, 
-         deleteApiData } from '../util';
-import { EasySingleton } from 'easy-injectionjs';
+         deleteApiData,
+         getBaseUrl,
+         accessFilter } from '../util';
+import { EasySingleton, is } from 'easy-injectionjs';
 
 @EasySingleton()
 export class Actions {
+  constructor(private _baseUrl: string = is('BASE_URL')) {}
   public getData<T> (Type: (new(...args:any[]) => T), url?: string): Observable<T[]> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url)
     ? Observable.fromPromise(constructArray(Type, url))
-    : (_keys.getAll)
+    : (_keys)
     ? Observable.fromPromise(constructArray(Type, (_keys.baseUrl) ? _keys.baseUrl + '/' +_keys.getAll: _keys.getAll))
     : Observable.throw('No data url was defined.');
   }
 
   public getDataById <T> (Type: (new(...args:any[]) => T), id: any, url?: string): Observable<T> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url && id)
     ? Observable.fromPromise(construct(Type, _keys.baseUrl + '/' + url, id))
     : (_keys.getById)
@@ -33,19 +36,19 @@ export class Actions {
   }
 
   public getDataByFilter <T> (Type: (new(...args:any[]) => T), key: any, url?: string): Observable<T> {
-    let _keys = access(create(Type));
-    let _accessor = accessKey(create(Type));
+    let _keys = <Api> access(Type);
+    let _filter: Filter = accessFilter(Type, key)
     return (url)
     ? Observable.fromPromise(construct(Type, url, key))
-    : (_accessor.filterKey)
-    ? Observable.fromPromise(construct(Type, (_accessor.appendBaseUrl)
-      ? _keys.baseUrl + '/' + _accessor.filterKey
-      : _accessor.filterUrl + '/' + _accessor.filterKey, key))
+    : (_filter.filterKey)
+    ? Observable.fromPromise(construct(Type, (_filter.appendBase)
+      ? this._baseUrl || _keys.baseUrl + '/' + _filter.filterKey
+      : _filter.filterUrl + '/' + _filter.filterKey, key))
     : Observable.throw('No data url or key was defined.');
   }
 
   public postData <T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string): Observable<any> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url)
     ? Observable.fromPromise(createApiData(Type, url, data))
     : (_keys.create)
@@ -54,7 +57,7 @@ export class Actions {
   }
 
   public updateData<T> (Type: (new(...args:any[]) => T), data: T| T[], url?: string): Observable<any> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url)
     ? Observable.fromPromise(updateApiData(Type, url, data))
     : (_keys.update)
@@ -63,7 +66,7 @@ export class Actions {
   }
 
   public updateDataById<T> (Type: (new(...args:any[]) => T), data: T| T[], id?: any, url?: string): Observable<any> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url)
     ? Observable.fromPromise(updateApiData(Type, (id)
       ? url + '/' + id
@@ -76,7 +79,7 @@ export class Actions {
   }
 
   public deleteData<T> (Type: (new(...args:any[]) => T), url?: string, data?: T | T[]): Observable<any> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url)
     ? Observable.fromPromise(deleteApiData(Type, url, data))
     : (_keys.delete)
@@ -85,7 +88,7 @@ export class Actions {
   }
 
   public deleteDataById<T> (Type: (new(...args:any[]) => T), data: T| T[], id?: any, url?: string): Observable<any> {
-    let _keys = access(create(Type));
+    let _keys = <Api> access(Type);
     return (url)
     ? Observable.fromPromise(updateApiData(Type, (id)
       ? url + '/' + id

@@ -12,32 +12,32 @@ export class Store implements IStore{
     this.contents= new class implements ISession {}()
   }
 
-  public getData<T> (key: (new () => T)): Observable<T|T[]> {
-    return Observable.of(this.contents[getName(create(key))]);
+  public getData<T> (key: (new(...args:any[]) => T)): Observable<T|T[]> {
+    return Observable.of(this.contents[getName(key)]);
   }
 
-  public getDataByKey<T> (key: (new () => T), id: any): Observable<T> {
-    return Observable.of(this.contents[getName(create(key))][id]);
+  public getDataByKey<T> (key: (new(...args:any[]) => T), id: any): Observable<T> {
+    return Observable.of(this.contents[getName(key)][id]);
   }
 
-  public putData<T> (key: (new () => T), data: Observable<T|T[]>): Observable<T|T[]> {
+  public putData<T> (key: (new(...args:any[]) => T), data: Observable<T|T[]>): Observable<T|T[]> {
     return data.do(x => {
-      this.contents[getName(create(key))] = x;
+      this.contents[getName(key)] = x;
     });
   }
 
-  public putDataByKey<T> (key: (new () => T), data: Observable<T>, id: any): Observable<T> {
+  public putDataByKey<T> (key: (new(...args:any[]) => T), data: Observable<T>, id: any): Observable<T> {
     return data.do(x => {
-      this.contents[getName(create(key))][id] = x;
+      this.contents[getName(key)][id] = x;
     });
   }
 
-  public check<T> (key: (new () => T)): boolean {
-    return this.contents[getName(create(key))] ? true : false;
+  public check<T> (key: (new(...args:any[]) => T)): boolean {
+    return this.contents[getName(key)] ? true : false;
   }
 
-  public checkByKey<T> (key: (new () => T), id: any): boolean {
-    return this.contents[getName(create(key))][id]
+  public checkByKey<T> (key: (new(...args:any[]) => T), id: any): boolean {
+    return this.contents[getName(key)][id]
     ? true : false; 
   }
 }

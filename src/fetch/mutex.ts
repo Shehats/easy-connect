@@ -20,7 +20,7 @@ export class Mutex implements IMutex {
     }, 15000)
   }
 
-  public getAll<T> (Type: (new () => T), force?: boolean, url?: string): Observable<T|T[]> {
+  public getAll<T> (Type: (new(...args:any[]) => T), force?: boolean, url?: string): Observable<T|T[]> {
     return (force || this.force)
     ? this.store.putData(Type, this.actions.getData(Type))
       .do(_ => this.force = false)
@@ -31,7 +31,7 @@ export class Mutex implements IMutex {
       .do(_ => this.force = false);
   }
 
-  public getByKey<T> (Type: (new () => T), id: any, force?: boolean, url?: string): Observable<T> {
+  public getByKey<T> (Type: (new(...args:any[]) => T), id: any, force?: boolean, url?: string): Observable<T> {
     return (force || this.force)
     ? this.store.putDataByKey(Type, this.actions.getDataById(Type, id), id)
       .do(_ => this.force = false)
@@ -42,7 +42,7 @@ export class Mutex implements IMutex {
       .do(_ => this.force = false);
   }
 
-  public getByFilter<T> (Type: (new () => T), key: any, force?: boolean, url?: string): Observable<T> {
+  public getByFilter<T> (Type: (new(...args:any[]) => T), key: any, force?: boolean, url?: string): Observable<T> {
     return (force || this.force)
     ? this.store.putDataByKey(Type, this.actions.getDataByFilter(Type, key), key)
       .do(_ => this.force = false)

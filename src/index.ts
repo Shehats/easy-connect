@@ -1,5 +1,5 @@
 export { api,
-         key,
+         id,
          query,
          secure,
          cacheable } from './util';

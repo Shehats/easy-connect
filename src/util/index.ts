@@ -6,7 +6,7 @@ export { construct,
 
 export { api,
          query,
-         key,
+         id,
          cacheable,
          secure,
          create,

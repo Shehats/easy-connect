@@ -22,3 +22,5 @@ export { Token,
          HttpFactory, 
          EasyTokenAuth, 
          EasyAuth } from './auth';
+
+export { EasyPrototype, EasySingleton, Easy } from 'easy-injectionjs'

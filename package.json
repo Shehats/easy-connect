@@ -1,6 +1,6 @@
 {
   "name": "easy-connect",
-  "version": "0.1.32",
+  "version": "0.1.4",
   "description": "A package makes life easier. Joking, it does the next best thing. It facilitates http requests and authentications, session caching and local caching in angular4.x, react.js and vue.js 2. The packages seeks to eleminate boilerplate code by inversion of control using containers and convenience annotations",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

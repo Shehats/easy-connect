@@ -22,16 +22,16 @@ export class Actions {
     return (url)
     ? Observable.fromPromise(constructArray(Type, url))
     : (_keys)
-    ? Observable.fromPromise(constructArray(Type, (_keys.baseUrl) ? _keys.baseUrl + '/' +_keys.getAll: _keys.getAll))
+    ? Observable.fromPromise(constructArray(Type, (this._baseUrl || _keys.baseUrl) ? this._baseUrl || _keys.baseUrl + '/' +_keys.getAll: _keys.getAll))
     : Observable.throw('No data url was defined.');
   }
 
   public getDataById <T> (Type: (new(...args:any[]) => T), id: any, url?: string): Observable<T> {
     let _keys = <Api> access(Type);
     return (url && id)
-    ? Observable.fromPromise(construct(Type, _keys.baseUrl + '/' + url, id))
+    ? Observable.fromPromise(construct(Type, this._baseUrl || _keys.baseUrl + '/' + url, id))
     : (_keys.getById)
-    ? Observable.fromPromise(construct(Type, (_keys.baseUrl) ? _keys.baseUrl + '/' +_keys.getById: _keys.getById, id))
+    ? Observable.fromPromise(construct(Type, (this._baseUrl || _keys.baseUrl) ? this._baseUrl || _keys.baseUrl + '/' +_keys.getById: _keys.getById, id))
     : Observable.throw('No data url or id was defined.');
   }
 

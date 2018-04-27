@@ -19,4 +19,5 @@ export { api,
          getBaseUrl,
          accessFilter,
          config,
-         key } from './util';
+         key,
+         isPrimitive } from './util';

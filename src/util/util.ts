@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { Easily, is, EasyPrototype } from 'easy-injectionjs';
 import { ApiBase, Api, Filter } from '../core'
 
@@ -33,7 +32,7 @@ export function query (target: Object, key: string) {
 }
 
 export const cacheable = <T extends {new(...args:any[]):{}}>(expiry?: number) => function (target: T) {
-  Easily('CACHE_' + target.name, expiry || 7);
+  Easily('CACHE_' + target.name, expiry || 6480000);
 }
 
 export function secure <T extends {new(...args:any[]):{}}> (target: T) {
@@ -55,10 +54,11 @@ export const accessFilter = <T extends {new(...args:any[]):{}}> (target: T, key:
 
 export const isSecure = <T extends {new(...args:any[]):{}}> (target: T) => is('SECURE_'+target.name)
 
-export const isCacheable = <T extends {new(...args:any[]):{}}> (target: T) => is('CACHE_' + target.name)
+export const isCacheable = <T extends {new(...args:any[]):{}}> (target: T): number => is('CACHE_' + target.name)
 
 export const getName = <T extends {new(...args:any[]):{}}> (instance: T): string => instance.name;
 
 export const getBaseUrl = (): string => is('BASE_URL')
 
-
+export const isPrimitive = (type: any): boolean => (typeof type === "string" 
+  || typeof type === "number" || typeof type === "boolean");

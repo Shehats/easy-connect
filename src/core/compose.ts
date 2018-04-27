@@ -35,3 +35,10 @@ export const Update = <T extends {new(...args:any[]):{}}> (target: T, data) => (
 export const Delete = <T extends {new(...args:any[]):{}}> (target: T, data) => (<Container>is('CONTAINER_'+ target.name)).delete(data);
 export const All = <T extends {new(...args:any[]):{}}> (target: T) => <any[]>  is('ALL_'+target.name);
 export const Query = <T extends {new(...args:any[]):{}}> (target: T) => <any[]> is('QUERY_'+target.name);
+export const Get_Current = (target:Object, key?: any): Subscription => {
+  let _container: Container = <Container>is('CONTAINER_'+ target.constructor.name);
+  return (key) 
+  ? _container.Current(target)
+  : _container.CurrentByKey(target, key)
+}
+export const Current = <T extends {new(...args:any[]):{}}> (target: T) => is('CURRENT_DATA_'+target.name);

@@ -2,7 +2,8 @@ export { construct,
          constructArray,
          createApiData,
          updateApiData,
-         deleteApiData} from './options';
+         deleteApiData,
+         genInstance } from './options';
 
 export { api,
          query,
@@ -18,4 +19,6 @@ export { api,
          accessId,
          getBaseUrl,
          accessFilter,
-         config } from './util';
+         config,
+         key,
+         isPrimitive } from './util';

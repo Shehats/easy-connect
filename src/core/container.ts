@@ -13,6 +13,7 @@ export class Container {
   private _easy: EasyConnect;
   public _all: Subscription;
   public _query: Subscription;
+  public _current: Subscription;
   private _id: any;
   private _key: any;
 
@@ -51,6 +52,17 @@ export class Container {
   	return this.createSubArray(this._all, this._easy.getAll(this._type),'ALL_');
   }
 
+  public Current(selected: Object): Subscription {
+    if (this._current)
+      this._current.unsubscribe()
+    return (this._current = this._easy.getById(this._type, selected[this._id])
+    .subscribe(x => {
+      Easily('CURRENT_'+this._type.name, x);
+    }))
+  }
+
+  public 
+  
   public Query <T extends {new(...args:any[]):{}}> (args: string): Subscription {
     this.ensure();
   	return this.createSubArray(this._query, this._easy.query(this._type, args),

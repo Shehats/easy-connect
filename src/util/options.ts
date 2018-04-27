@@ -1,19 +1,27 @@
 import { HttpFactory } from '../auth';
-import { create, access } from './';
+import { create, access, isPrimitive } from './';
 import * as _ from 'lodash';
 import { is } from 'easy-injectionjs';
+
+export function genInstance<T> (Type: (new () => T), target: T, match: Object) {
+  _.forEach(Object.getOwnPropertyNames(match), x => {
+    if(target[x] && !isPrimitive(match[x])) {
+      genInstance(Type, target[x], match[x])
+    } else {
+      target[x] = match[x]
+    }
+  })
+  return target;
+}
 
 export function construct<T> (Type: (new () => T), 
 							  url: string, id: any,
 							  _http: HttpFactory = is(HttpFactory)): Promise<T> {
-	let _data = create(Type);
+	let _data = is(Type);
 	return _http.getHttp(Type).toPromise()
 	.then(http => http.get(url+`/${id}`)
 		.then(x => {
-			_.forEach(Object.getOwnPropertyNames(x.data), key => {
-				_data[key] = x.data[key]
-			});
-			return _data;
+      return genInstance(Type, _data, x.data)
 		}))
 }
 
@@ -25,11 +33,8 @@ export function constructArray<T> (Type: (new () => T),
 	.then(http => http.get(url))
 	.then(x => {
 		_.forEach(x.data, y => {
-			let item: T = create(Type);
-			_.forEach(Object.getOwnPropertyNames(y), key => {
-				item[key] = y[key]
-			})
-			items.push(item);
+			let item: T = is(Type);
+			items.push(genInstance(Type, item, y));
 		})
 		return items;
 	})
@@ -55,4 +60,3 @@ export function deleteApiData<T> (Type: (new () => T),
   return _http.getHttp(Type).toPromise()
   .then(http => (data) ? http.put(url, data): http.put(url));
 }
-

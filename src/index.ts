@@ -2,12 +2,13 @@ export { api,
          id,
          query,
          secure,
-         cacheable } from './util';
+         cacheable,
+         key,
+         config } from './util';
          
 export { IAuth,
          IConfig,
          EasyConnect,
-         Container,
          container,
          All,
          Add,
@@ -21,6 +22,11 @@ export { IAuth,
 export { Token,
          HttpFactory, 
          EasyTokenAuth, 
-         EasyAuth } from './auth';
+         EasyAuth,
+         AuthFactory,
+         Login,
+         Register,
+         Validate,
+         ValidateData } from './auth';
 
-export { EasyPrototype, EasySingleton, Easy } from 'easy-injectionjs'
+export { EasyPrototype, EasyFactory, EasySingleton, Easy } from 'easy-injectionjs'

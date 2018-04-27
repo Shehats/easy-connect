@@ -4,7 +4,9 @@ import * as _ from 'lodash';
 import { create, 
          access,
          accessQuery,
-         accessId } from '../util';
+         accessId,
+         accessFilter } from '../util';
+import { Filter } from './'
 import { Easy, EasyPrototype, Easily, is} from 'easy-injectionjs';
 
 @EasyPrototype()
@@ -57,11 +59,19 @@ export class Container {
       this._current.unsubscribe()
     return (this._current = this._easy.getById(this._type, selected[this._id])
     .subscribe(x => {
-      Easily('CURRENT_'+this._type.name, x);
+      Easily('CURRENT_DATA_'+this._type.name, x);
     }))
   }
 
-  public 
+  public CurrentByKey(selected: Object, key: any): Subscription {
+    if (this._current)
+      this._current.unsubscribe()
+    let _filter: Filter = accessFilter(this._type, key);
+    return (this._current = this._easy.getByFilter(this._type, (_filter)? selected[_filter.filterKey]: key)
+    .subscribe(x => {
+      Easily('CURRENT_DATA_'+this._type.name, x);
+    }))
+  }
   
   public Query <T extends {new(...args:any[]):{}}> (args: string): Subscription {
     this.ensure();

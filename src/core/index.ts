@@ -22,4 +22,6 @@ export { Compose,
          Update,
          Delete,
          Get_All, 
-         Get_Query } from './compose';
+         Get_Query,
+         Get_Current,
+         Current } from './compose';

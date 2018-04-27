@@ -17,7 +17,9 @@ export { IAuth,
          Delete,
          AuthType,
          Get_All, 
-         Get_Query } from './core';
+         Get_Query,
+         Get_Current,
+         Current } from './core';
 
 export { Token,
          HttpFactory, 

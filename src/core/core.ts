@@ -49,6 +49,7 @@ export interface IAuth {
   logout(): Observable<any>;
   register(registerParams: Object): Observable<any>;
   validate(): Observable<any>;
+  validateData(data: Object): Observable<any>;
 }
 
 export interface IMutex {
@@ -62,8 +63,10 @@ export interface IConfig {
   logoutUrl?: string,
   registerUrl?: string,
   validateUrl?: string,
+  validateDataUrl?: string,
   prefix?: string, 
-  key?:string
+  key?:string,
+  tokenExpiry?: number
 }
 
 export interface IEasy {

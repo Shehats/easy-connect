@@ -3,6 +3,17 @@ import { create, access, isPrimitive } from './';
 import * as _ from 'lodash';
 import { is } from 'easy-injectionjs';
 
+export function genInstance<T> (Type: (new () => T), target: T, match: Object) {
+  _.forEach(Object.getOwnPropertyNames(match), x => {
+    if(target[x] && !isPrimitive(match[x])) {
+      genInstance(Type, target[x], match[x])
+    } else {
+      target[x] = match[x]
+    }
+  })
+  return target;
+}
+
 export function construct<T> (Type: (new () => T), 
 							  url: string, id: any,
 							  _http: HttpFactory = is(HttpFactory)): Promise<T> {
@@ -10,16 +21,7 @@ export function construct<T> (Type: (new () => T),
 	return _http.getHttp(Type).toPromise()
 	.then(http => http.get(url+`/${id}`)
 		.then(x => {
-			_.forEach(Object.getOwnPropertyNames(x.data), key => {
-				if(_data[key] && !isPrimitive(x.data[key])) {
-					_.forEach(Object.getOwnPropertyNames(x.data[key]), y => {
-						_data[key][y] = x.data[key][y]
-					})
-				} else {
-					_data[key] = x.data[key]
-				}
-			});
-			return _data;
+      return genInstance(Type, _data, x.data)
 		}))
 }
 
@@ -32,16 +34,7 @@ export function constructArray<T> (Type: (new () => T),
 	.then(x => {
 		_.forEach(x.data, y => {
 			let item: T = is(Type);
-			_.forEach(Object.getOwnPropertyNames(y), key => {
-        if(item[key] && !isPrimitive(y[key])) {
-          _.forEach(Object.getOwnPropertyNames(y[key]), g => {
-            item[key][g] = y[key][g]
-          })
-        } else {
-          item[key] = y[key]
-        }
-			})
-			items.push(item);
+			items.push(genInstance(Type, item, y));
 		})
 		return items;
 	})

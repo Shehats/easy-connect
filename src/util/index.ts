@@ -2,7 +2,8 @@ export { construct,
          constructArray,
          createApiData,
          updateApiData,
-         deleteApiData} from './options';
+         deleteApiData,
+         genInstance } from './options';
 
 export { api,
          query,

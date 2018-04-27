@@ -38,6 +38,9 @@ export class EasyTokenAuth implements IAuth {
     return Observable.fromPromise(axios.get(this.config.validateUrl));
   }
 
+  public validateData(data: Object): Observable<any> {
+    return Observable.fromPromise(axios.post(this.config.validateDataUrl, data));
+  }
 }
 
 @EasySingleton('SESSION_AUTH')
@@ -61,5 +64,8 @@ export class EasyAuth implements IAuth{
 
   public register(registerParams: Object): Observable<any> {
     return Observable.fromPromise(axios.post(this.config.registerUrl, registerParams));
+  }
+  public validateData(data: Object): Observable<any> {
+    return Observable.fromPromise(axios.post(this.config.validateDataUrl, data));
   }
 }

@@ -8,15 +8,18 @@ import { EasySingleton, Easy } from 'easy-injectionjs';
 @EasySingleton()
 export class HttpFactory {
   private _http: Observable<AxiosInstance>;
-  
+  private _secureHttp: Observable<AxiosInstance>;
+
   @Easy()
   private cache: Cache;
   
-  public getHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
-    return this._http || this.genHttp(type);
+  public getHttp <T> (type: (new (...args: any[]) => T)): Observable<AxiosInstance> {
+    return (isSecure(type))
+    ? this._secureHttp || (this._secureHttp = this.genHttp(type))
+    : this._http || (this._http = this.genHttp(type));
   }
 
-  private genHttp <T> (type: (new () => T)): Observable<AxiosInstance> {
+  private genHttp <T> (type: (new (...args: any[]) => T)): Observable<AxiosInstance> {
     let http = axios.create();
     return isSecure(type)
     ? this.cache.getItem(Token).map((x: Token) => { 

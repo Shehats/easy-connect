@@ -15,10 +15,13 @@ export const api = <T extends {new(...args:any[]):{}}> (value: Api) => function 
   Easily('API_' + target.name, value);
 }
 
-export const filter = <T extends {new(...args:any[]):{}}> (value: Filter) => function (target: T): any {
-  let _existing: FilterContainer = is('FILTER_' + target.name) || new FilterContainer();
-  _existing[value.filterKey] = value
-  Easily('FILTER_' + target.name, _existing)
+export const key = (url?: string) => function (target: Object, key: string): any {
+  let _existing: FilterContainer = is('FILTER_' + target.constructor.name) || new FilterContainer();
+  _existing[key] = class implements Filter {
+    filterKey = key;
+    filterUrl = url;
+  }
+  Easily('FILTER_' + target.constructor.name, _existing)
 }
 
 export function id (target: Object, key: string) {

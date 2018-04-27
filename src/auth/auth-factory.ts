@@ -25,4 +25,7 @@ export class AuthFactory implements IAuth {
     return this._auth.validate();
   }
 
+  public get Auth(): IAuth {
+    return this._auth;
+  }
 }

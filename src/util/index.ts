@@ -18,4 +18,5 @@ export { api,
          accessId,
          getBaseUrl,
          accessFilter,
-         config } from './util';
+         config,
+         key } from './util';

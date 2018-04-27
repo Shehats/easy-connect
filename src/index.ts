@@ -2,7 +2,8 @@ export { api,
          id,
          query,
          secure,
-         cacheable } from './util';
+         cacheable,
+         key } from './util';
          
 export { IAuth,
          IConfig,
@@ -21,6 +22,7 @@ export { IAuth,
 export { Token,
          HttpFactory, 
          EasyTokenAuth, 
-         EasyAuth } from './auth';
+         EasyAuth,
+         AuthFactory } from './auth';
 
-export { EasyPrototype, EasySingleton, Easy } from 'easy-injectionjs'
+export { EasyPrototype, EasyFactory, EasySingleton, Easy } from 'easy-injectionjs'

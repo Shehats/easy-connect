@@ -5,22 +5,21 @@ import { create,
          accessQuery, 
          constructArray,
          getBaseUrl } from '../util';
-import { Api } from '../core'
+import { Api, Filter } from '../core'
+import { EasySingleton } from 'easy-injectionjs';
 
+@EasySingleton()
 export class Extra {
-  public static query <T> (Type: (new(...args:any[]) => T), args: string, url?: string): Observable<T[]> {
+  public query <T> (Type: (new(...args:any[]) => T), 
+    key: string, args: string, url?: string): Observable<T[]> {
     let _keys = <Api> access(Type);
     let _baseUrl = getBaseUrl();
-    let _query = accessQuery(Type);
+    let _query: Filter = accessQuery(Type, key);
     return Observable.fromPromise(
       constructArray(Type, (url) 
-      ? url + '?' + _query + '=' + args
-      : (_baseUrl && _keys.queryUrl)
-      ? _baseUrl + '/' + _keys.queryUrl + '?' + _query + '=' + args
-      : (_baseUrl)
-      ? _baseUrl + '?' + _query + '=' + args
-      : (_keys.baseUrl && _keys.queryUrl)
-      ? _keys.baseUrl + '/' + _keys.queryUrl + '?' + _query + '=' + args
-      : _keys.queryUrl + '?' + _query + '=' + args))
+      ? url + '?' + _query.key + '=' + args
+      : (_keys.baseUrl && _query.url && _query.appendBase)
+      ? _keys.baseUrl + '/' + _query.url + '?' + _query.key + '=' + args
+      : _keys.baseUrl + '?' + _query.key + '=' + args))
   }
 } 

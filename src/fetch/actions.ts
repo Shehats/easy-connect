@@ -5,6 +5,7 @@ import 'rxjs/add/operator/catch'
 import { Api, Filter } from '../core'
 import { create, 
          access,
+         accessId,
          construct, 
          constructArray, 
          createApiData, 
@@ -40,10 +41,10 @@ export class Actions {
     let _filter: Filter = accessFilter(Type, key)
     return (url)
     ? Observable.fromPromise(construct(Type, url, key))
-    : (_filter.filterKey)
+    : (_filter.key)
     ? Observable.fromPromise(construct(Type, (_filter.appendBase)
-      ? this._baseUrl || _keys.baseUrl + '/' + _filter.filterKey
-      : _filter.filterUrl + '/' + _filter.filterKey, key))
+      ? this._baseUrl || _keys.baseUrl + '/' + _filter.key
+      : _filter.url + '/' + _filter.url, key))
     : Observable.throw('No data url or key was defined.');
   }
 
@@ -67,36 +68,38 @@ export class Actions {
 
   public updateDataById<T> (Type: (new(...args:any[]) => T), data: T| T[], id?: any, url?: string): Observable<any> {
     let _keys = <Api> access(Type);
+    let _id =  <string> accessId(Type);
     return (url)
     ? Observable.fromPromise(updateApiData(Type, (id)
       ? url + '/' + id
-      : url + '/' + data[_keys.id], data))
-    : (_keys.update)
+      : url + '/' + data[_id], data))
+    : (_keys.baseUrl)
     ? Observable.fromPromise(updateApiData(Type, (_keys.baseUrl) 
-      ? _keys.baseUrl + '/' + _keys.update + (id) ? id: data[_keys.id]
-      : _keys.update + (id) ? id: data[_keys.id], data))
+      ? _keys.baseUrl + '/' + _keys.updateById + '/' + (id || data[_id])
+      : _keys.updateById + '/' + (id || data[_id]), data))
     : Observable.throw('No data url was defined.');
   }
 
-  public deleteData<T> (Type: (new(...args:any[]) => T), url?: string, data?: T | T[]): Observable<any> {
+  public deleteData<T> (Type: (new(...args:any[]) => T), url?: string): Observable<any> {
     let _keys = <Api> access(Type);
     return (url)
-    ? Observable.fromPromise(deleteApiData(Type, url, data))
+    ? Observable.fromPromise(deleteApiData(Type, url))
     : (_keys.delete)
-    ? Observable.fromPromise(deleteApiData(Type, (_keys.baseUrl) ? _keys.baseUrl + '/' + _keys.delete: _keys.delete, data))
+    ? Observable.fromPromise(deleteApiData(Type, (_keys.baseUrl) ? _keys.baseUrl + '/' + _keys.delete: _keys.delete))
     : Observable.throw('No data url was defined.');
   }
 
   public deleteDataById<T> (Type: (new(...args:any[]) => T), data: T| T[], id?: any, url?: string): Observable<any> {
     let _keys = <Api> access(Type);
+    let _id =  <string> accessId(Type);
     return (url)
-    ? Observable.fromPromise(updateApiData(Type, (id)
+    ? Observable.fromPromise(deleteApiData(Type, (id)
       ? url + '/' + id
-      : url + '/' + data[_keys.id], data))
-    : (_keys.delete)
-    ? Observable.fromPromise(updateApiData(Type, (_keys.baseUrl) 
-      ? _keys.baseUrl + '/' + _keys.delete + (id) ? id: data[_keys.id]
-      : _keys.delete + (id) ? id: data[_keys.id], data))
+      : url + '/' + data[_id]))
+    : (_keys.baseUrl)
+    ? Observable.fromPromise(deleteApiData(Type, (_keys.baseUrl) 
+      ? _keys.baseUrl + '/' + _keys.deleteById + '/' + (id || data[_id])
+      : _keys.deleteById + '/' + (id || data[_id])))
     : Observable.throw('No data url was defined.');
   }
 }

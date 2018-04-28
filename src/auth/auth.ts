@@ -50,7 +50,7 @@ export class EasyAuth implements IAuth{
 
   public login (loginParams: Object): Observable<any> {
     return Observable.fromPromise(
-      axios.post(this.config.logoutUrl, loginParams)
+      axios.post(this.config.loginUrl, loginParams)
       .then((x: AxiosResponse<any>) => x.data));
   }
 

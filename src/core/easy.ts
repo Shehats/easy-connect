@@ -17,6 +17,9 @@ export class EasyConnect implements IEasy {
   @Easy()
   private actions: Actions;
 
+  @Easy()
+  private extra: Extra;
+
   constructor() {
   }
 
@@ -59,8 +62,8 @@ export class EasyConnect implements IEasy {
       : Observable.throw("Couldn't get the data"));
   }
 
-  public query <T> (Type: (new(...args:any[]) => T), args: string, url?: string): Observable<T[]> {
-    return Extra.query(Type, args, url);
+  public query <T> (Type: (new(...args:any[]) => T), key: string, args: string, url?: string): Observable<T[]> {
+    return this.extra.query(Type, key, args, url);
   }
 
   public create <T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string): Observable<any> {
@@ -75,8 +78,8 @@ export class EasyConnect implements IEasy {
     return this.actions.updateDataById(Type, data, id, url);
   }
 
-  public delete <T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string): Observable<any> {
-    return this.actions.deleteData(Type, url, data);
+  public delete <T> (Type: (new(...args:any[]) => T), url?: string): Observable<any> {
+    return this.actions.deleteData(Type, url);
   }
 
   public deleteDataById <T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string, id?: any): Observable<any> {

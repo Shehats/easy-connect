@@ -1,10 +1,10 @@
-export { api,
+export { authConfig,
+         api,
          id,
          query,
          secure,
          cacheable,
-         key,
-         config } from './util';
+         key } from './util';
          
 export { IAuth,
          IConfig,

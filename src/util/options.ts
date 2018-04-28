@@ -3,7 +3,7 @@ import { create, access, isPrimitive } from './';
 import * as _ from 'lodash';
 import { is } from 'easy-injectionjs';
 
-export function genInstance<T> (Type: (new () => T), target: T, match: Object) {
+export function genInstance<T> (Type: (new (...args: any[]) => T), target: T, match: Object) {
   _.forEach(Object.getOwnPropertyNames(match), x => {
     if(target[x] && !isPrimitive(match[x])) {
       genInstance(Type, target[x], match[x])
@@ -14,7 +14,7 @@ export function genInstance<T> (Type: (new () => T), target: T, match: Object) {
   return target;
 }
 
-export function construct<T> (Type: (new () => T), 
+export function construct<T> (Type: (new (...args: any[]) => T),
 							  url: string, id: any,
 							  _http: HttpFactory = is(HttpFactory)): Promise<T> {
 	let _data = is(Type);
@@ -25,7 +25,7 @@ export function construct<T> (Type: (new () => T),
 		}))
 }
 
-export function constructArray<T> (Type: (new () => T), 
+export function constructArray<T> (Type: (new (...args: any[]) => T),
 	                               url: string,
 	                               _http: HttpFactory = is(HttpFactory)): Promise<T[]> {
 	let items: T[] = [];
@@ -40,23 +40,22 @@ export function constructArray<T> (Type: (new () => T),
 	})
 }
 
-export function createApiData<T> (Type: (new () => T),
+export function createApiData<T> (Type: (new (...args: any[]) => T),
 	                              url: string, data: T | T[],
 	                              _http: HttpFactory = is(HttpFactory)): Promise<any> {
   return _http.getHttp(Type).toPromise()
   .then(http => http.post(url, data));
 }
 
-export function updateApiData<T> (Type: (new () => T), 
+export function updateApiData<T> (Type: (new (...args: any[]) => T),
 								  url: string, data: T | T[],
 								  _http: HttpFactory = is(HttpFactory)): Promise<any> {
   return _http.getHttp(Type).toPromise()
   .then(http => http.put(url, data));
 }
 
-export function deleteApiData<T> (Type: (new () => T), 
-								  url: string, data?: T | T[],
-								  _http: HttpFactory = is(HttpFactory)): Promise<any> {
+export function deleteApiData<T> (Type: (new (...args: any[]) => T),
+								  url: string,_http: HttpFactory = is(HttpFactory)): Promise<any> {
   return _http.getHttp(Type).toPromise()
-  .then(http => (data) ? http.put(url, data): http.put(url));
+  .then(http => http.delete(url));
 }

@@ -5,8 +5,9 @@ import { create,
          access,
          accessQuery,
          accessId,
-         accessFilter } from '../util';
-import { Filter } from './'
+         accessFilter,
+         getQueryKey } from '../util';
+import { Filter, Api } from './'
 import { Easy, EasyPrototype, Easily, is} from 'easy-injectionjs';
 
 @EasyPrototype()
@@ -17,7 +18,6 @@ export class Container {
   public _query: Subscription;
   public _current: Subscription;
   private _id: any;
-  private _key: any;
 
   constructor(private _type: {new(...args:any[]):{}} = is('CURRENT')) {
   }
@@ -43,8 +43,7 @@ export class Container {
   }
 
   private ensure() {
-    if (!this._key || !this._id) {
-      this._key = accessQuery(this._type);
+    if (!this._id) {
       this._id = accessId(this._type);
     }
   }
@@ -67,18 +66,19 @@ export class Container {
     if (this._current)
       this._current.unsubscribe()
     let _filter: Filter = accessFilter(this._type, key);
-    return (this._current = this._easy.getByFilter(this._type, (_filter)? selected[_filter.filterKey]: key)
+    return (this._current = this._easy.getByFilter(this._type, (_filter)? selected[_filter.key]: key)
     .subscribe(x => {
       Easily('CURRENT_DATA_'+this._type.name, x);
     }))
   }
   
-  public Query <T extends {new(...args:any[]):{}}> (args: string): Subscription {
+  public Query <T extends {new(...args:any[]):{}}> (key: string, args: string): Subscription {
     this.ensure();
-  	return this.createSubArray(this._query, this._easy.query(this._type, args),
+    let _key = getQueryKey(this._type, key);
+  	return this.createSubArray(this._query, this._easy.query(this._type, key, args),
   		'QUERY_', () => {
   		let arr: T[] = is('ALL_'+this._type.name);
-  		arr.filter(x => x[this._key] == args)
+  		arr.filter(x => x[_key] == args)
   		Easily('QUERY_'+this._type.name, arr);
   	});	
   }
@@ -95,21 +95,41 @@ export class Container {
 
   public update <T extends {new(...args:any[]):{}}> (data: T): void {
   	this.removeSub();
-    this._easy.update(this._type, data)
-    .subscribe(_ => {
-    	let arr: T[] = is('ALL_'+this._type.name);
-    	arr[data[this._id]] = data
-    	Easily('ALL_'+this._type.name, arr);
-    });
+    let _u_id = <Api> access(this._type);
+    if (_u_id.update) {
+      this._easy.update(this._type, data)
+      .subscribe(_ => {
+        let arr: T[] = is('ALL_'+this._type.name);
+        arr[data[this._id]] = data
+        Easily('ALL_'+this._type.name, arr);
+      });
+    } else {
+      this._easy.updateById(this._type, data)
+      .subscribe(_ => {
+        let arr: T[] = is('ALL_'+this._type.name);
+        arr[data[this._id]] = data
+        Easily('ALL_'+this._type.name, arr);
+      });
+    }
   }
 
   public delete <T extends {new(...args:any[]):{}}> (data: T): void {
   	this.removeSub();
-    this._easy.delete(this._type, data)
-    .subscribe(_ => {
-    	let arr: T[] = is('ALL_'+this._type.name);
-    	arr.splice(arr.indexOf(data,0), 1);
-    	Easily('ALL_'+this._type.name, arr);
-    });
+    let _u_id = <Api> access(this._type);
+    if (_u_id.delete) {
+      this._easy.delete(this._type)
+      .subscribe(_ => {
+        let arr: T[] = is('ALL_'+this._type.name);
+        arr.splice(arr.indexOf(data,0), 1);
+        Easily('ALL_'+this._type.name, arr);
+      });
+    } else {
+      this._easy.deleteDataById(this._type, data)
+      .subscribe(_ => {
+        let arr: T[] = is('ALL_'+this._type.name);
+        arr.splice(arr.indexOf(data,0), 1);
+        Easily('ALL_'+this._type.name, arr);
+      });
+    }
   }
 }

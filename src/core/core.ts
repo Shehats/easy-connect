@@ -19,8 +19,7 @@ export interface Api {
   update?: string,
   updateById?: string,
   delete?: string,
-  deleteById?: string,
-  id?: string,  
+  deleteById?: string,  
   queryUrl?: string
 }
 
@@ -30,8 +29,8 @@ export interface ApiBase {
 }
 
 export interface Filter {
-  filterKey: string,
-  filterUrl?: string,
+  key?: string,
+  url?: string,
   appendBase?: boolean
 }
 
@@ -77,6 +76,6 @@ export interface IEasy {
   create<T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string): Observable<any>;
   update<T> (Type: (new(...args:any[]) => T), data: T| T[], url?: string): Observable<any>;
   updateById <T> (Type: (new(...args:any[]) => T), data: T| T[], id?: any, url?: string): Observable<any>;
-  delete<T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string): Observable<any>;
+  delete <T> (Type: (new(...args:any[]) => T), url?: string): Observable<any>;
   deleteDataById<T> (Type: (new(...args:any[]) => T), data: T | T[], url?: string, id?: any): Observable<any>;
 }

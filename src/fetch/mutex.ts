@@ -20,7 +20,10 @@ export class Mutex implements IMutex {
     : this.store.putData(Type, this.actions.getData(Type))
   }
 
-  public getByKey<T> (Type: (new(...args:any[]) => T), id: any, force?: boolean, url?: string): Observable<T> {
+  public getByKey<T> (Type: (new(...args:any[]) => T), 
+                      id: any, 
+                      force?: boolean, 
+                      url?: string): Observable<T> {
     return (force)
     ? this.store.putDataByKey(Type, this.actions.getDataById(Type, id), id)
     : (this.store.checkByKey(Type, id))

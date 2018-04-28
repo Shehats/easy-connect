@@ -5,7 +5,8 @@ export { construct,
          deleteApiData,
          genInstance } from './options';
 
-export { api,
+export { authConfig,
+         api,
          query,
          id,
          cacheable,
@@ -21,4 +22,5 @@ export { api,
          accessFilter,
          config,
          key,
-         isPrimitive } from './util';
+         isPrimitive,
+         getQueryKey } from './util';

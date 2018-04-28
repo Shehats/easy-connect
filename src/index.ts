@@ -27,6 +27,7 @@ export { Token,
          EasyAuth,
          AuthFactory,
          Login,
+         Logout,
          Register,
          Validate,
          ValidateData } from './auth';

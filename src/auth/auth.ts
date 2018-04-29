@@ -7,11 +7,10 @@ import { EasySingleton, is, Easy, Easily } from 'easy-injectionjs';
 
 @EasySingleton('TOKEN_AUTH')
 export class EasyTokenAuth implements IAuth {
-  @Easy()
-  private token: Token;
-  @Easy()
-  private cache: Cache;
-  constructor (private config: IConfig = is('CONFIG')) {
+  constructor (
+    private config: IConfig = is('CONFIG'),
+    private token: Token = is(Token),
+    private cache: Cache = is(Cache)) {
   }
 
   public login(loginParams: Object): Observable<any> {
